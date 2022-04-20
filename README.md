@@ -1,2 +1,2 @@
 #
-zzb19yk.github.io
+http://zzb19yk.github.io
