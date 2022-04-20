@@ -87,7 +87,7 @@ toc: true
 
 disqus:
   comments: true  # global switch for posts comments.
-  shortname: 'zzb19yk-github-io'
+  shortname: 'zzb19yk'
 
 paginate: 10
 
