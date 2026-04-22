@@ -6,315 +6,391 @@
 <title>Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
-  :root {
-    --teal: #7ecdc8;
-    --teal-light: #a8deda;
-    --cream: #fdfbf4;
-    --cream-warm: #f5f0e8;
-    --text-dark: #1a1a1a;
-    --text-mid: #555;
-    --nav-h: 64px;
-  }
+:root {
+  --teal: #7ecdc8;
+  --teal-light: #a8deda;
+  --cream: #fdfbf4;
+  --cream-warm: #f5f0e8;
+  --dark: #0d0f0e;
+  --text-dark: #1a1a1a;
+  --text-mid: #666;
+  --nav-h: 60px;
+}
 
-  html { scroll-behavior: smooth; }
+html, body {
+  width: 100%; height: 100%;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--dark);
+  color: var(--text-dark);
+  overflow: hidden;
+  cursor: none;
+}
 
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--cream);
-    color: var(--text-dark);
-    overflow-x: hidden;
-    cursor: none;
-  }
+/* CURSOR */
+#cursor {
+  position: fixed;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  pointer-events: none;
+  z-index: 9999;
+  transform: translate(-50%,-50%);
+  transition: width .15s, height .15s;
+  mix-blend-mode: screen;
+}
+#cursor.big { width: 34px; height: 34px; background: rgba(126,205,200,.4); }
 
-  /* ── CURSOR ── */
-  #cursor {
-    position: fixed;
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    background: var(--teal);
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%);
-    transition: width .15s, height .15s, background .15s;
-    mix-blend-mode: multiply;
-  }
-  #cursor.big {
-    width: 40px; height: 40px;
-    background: rgba(126,205,200,.35);
-  }
+/* VIEWS */
+.view {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  opacity: 0;
+  transition: opacity .45s ease;
+}
+.view.active { display: flex; }
+.view.visible { opacity: 1; }
 
-  /* ── NAVBAR ── */
-  nav {
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: var(--nav-h);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 48px;
-    z-index: 100;
-    background: rgba(253,251,244,.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(126,205,200,.2);
-  }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   ENTRY
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+#view-entry {
+  background: var(--dark);
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
 
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    font-weight: 300;
-    letter-spacing: .08em;
-    color: var(--text-dark);
-    text-decoration: none;
-    cursor: none;
-  }
+.entry-glow {
+  position: absolute;
+  width: 600px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(126,205,200,.06) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-55%);
+  pointer-events: none;
+}
 
-  .nav-links {
-    display: flex;
-    gap: 40px;
-    list-style: none;
-  }
+.entry-label {
+  font-size: 10px;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: rgba(126,205,200,.45);
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: eIn .7s .3s forwards;
+}
+.entry-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(26px, 4.5vw, 48px);
+  font-weight: 300;
+  color: rgba(255,255,255,.86);
+  text-align: center;
+  margin-bottom: 10px;
+  opacity: 0;
+  animation: eIn .7s .5s forwards;
+}
+.entry-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,.28);
+  letter-spacing: .07em;
+  margin-bottom: 56px;
+  opacity: 0;
+  animation: eIn .7s .65s forwards;
+}
+.entry-choices {
+  display: flex;
+  gap: 18px;
+  opacity: 0;
+  animation: eIn .7s .85s forwards;
+}
+.entry-btn {
+  position: relative;
+  width: 196px;
+  padding: 26px 22px 22px;
+  border: 1px solid rgba(126,205,200,.18);
+  border-radius: 6px;
+  background: rgba(126,205,200,.02);
+  cursor: none;
+  text-align: left;
+  transition: border-color .25s, background .25s, transform .22s;
+  overflow: hidden;
+}
+.entry-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(126,205,200,.07), transparent);
+  opacity: 0;
+  transition: opacity .25s;
+}
+.entry-btn:hover {
+  border-color: rgba(126,205,200,.48);
+  transform: translateY(-4px);
+}
+.entry-btn:hover::after { opacity: 1; }
+.eb-mode { font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: var(--teal); margin-bottom: 8px; }
+.eb-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: rgba(255,255,255,.88); margin-bottom: 10px; }
+.eb-desc { font-size: 11px; line-height: 1.75; color: rgba(255,255,255,.32); }
+.eb-arrow { position: absolute; bottom: 18px; right: 18px; font-size: 14px; color: rgba(126,205,200,.35); transition: transform .2s, color .2s; }
+.entry-btn:hover .eb-arrow { transform: translate(3px,-3px); color: var(--teal); }
+@keyframes eIn { to { opacity: 1; } }
 
-  .nav-links a {
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: .06em;
-    color: var(--text-mid);
-    text-decoration: none;
-    cursor: none;
-    position: relative;
-    transition: color .2s;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute;
-    bottom: -3px; left: 0;
-    width: 0; height: 1px;
-    background: var(--teal);
-    transition: width .25s ease;
-  }
-  .nav-links a:hover { color: var(--text-dark); }
-  .nav-links a:hover::after { width: 100%; }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   MAIN / BUBBLES
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+#view-main {
+  background: linear-gradient(135deg, #aee3df 0%, #c6eeea 30%, #fdfbf4 68%, #f7f2e5 100%);
+}
+#bubble-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  display: block;
+}
+.bubble-hint {
+  position: absolute;
+  bottom: 30px; left: 36px;
+  font-size: 10px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  color: rgba(80,120,115,.55);
+  pointer-events: none;
+  z-index: 10;
+}
+#score-wrap {
+  position: absolute;
+  bottom: 26px; right: 36px;
+  text-align: right;
+  pointer-events: none;
+  z-index: 10;
+}
+#score-label { font-size: 9px; letter-spacing: .12em; color: rgba(80,120,115,.55); text-transform: uppercase; }
+#score-val {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 300;
+  color: var(--teal);
+  line-height: 1;
+  transition: transform .15s;
+}
 
-  /* ── HERO ── */
-  #hero {
-    width: 100vw;
-    height: 100vh;
-    position: relative;
-    overflow: hidden;
-    background: linear-gradient(135deg, #b8e8e4 0%, #d4f0ed 30%, #fdfbf4 70%, #faf5e8 100%);
-  }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   NAVBAR
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+#navbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: var(--nav-h);
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  z-index: 500;
+  background: rgba(253,251,244,.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(126,205,200,.16);
+}
+#navbar.show { display: flex; }
+.nav-logo {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 19px; font-weight: 300;
+  letter-spacing: .1em;
+  color: var(--text-dark);
+  cursor: none;
+  background: none; border: none;
+  transition: color .2s;
+}
+.nav-logo:hover { color: var(--teal); }
+.nav-links { display: flex; gap: 28px; list-style: none; }
+.nav-links button {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 400;
+  letter-spacing: .07em;
+  color: var(--text-mid);
+  background: none; border: none;
+  cursor: none;
+  position: relative;
+  padding: 2px 0;
+  transition: color .2s;
+}
+.nav-links button::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: var(--teal);
+  transition: width .22s;
+}
+.nav-links button:hover,
+.nav-links button.active { color: var(--text-dark); }
+.nav-links button:hover::after,
+.nav-links button.active::after { width: 100%; }
+.mode-badge {
+  font-size: 9px; letter-spacing: .1em; text-transform: uppercase;
+  padding: 4px 10px;
+  border: 1px solid rgba(126,205,200,.35);
+  border-radius: 99px;
+  color: var(--teal);
+  cursor: none;
+  background: none;
+  font-family: 'DM Sans', sans-serif;
+  transition: background .2s;
+}
+.mode-badge:hover { background: rgba(126,205,200,.1); }
 
-  .hero-text {
-    position: absolute;
-    bottom: 80px;
-    left: 72px;
-    z-index: 10;
-    pointer-events: none;
-  }
-  .hero-text h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(52px, 7vw, 96px);
-    font-weight: 300;
-    line-height: 1.05;
-    letter-spacing: -.01em;
-    color: var(--text-dark);
-    opacity: 0;
-    transform: translateY(30px);
-    animation: fadeUp .8s .4s forwards;
-  }
-  .hero-text h1 em {
-    font-style: italic;
-    color: var(--teal);
-  }
-  .hero-text p {
-    margin-top: 16px;
-    font-size: 14px;
-    color: var(--text-mid);
-    letter-spacing: .04em;
-    opacity: 0;
-    animation: fadeUp .8s .65s forwards;
-  }
+/* ━━━━━━━━━━━━━━━━━━━━━━━━
+   CONTENT PAGES
+━━━━━━━━━━━━━━━━━━━━━━━━ */
+.content-view {
+  background: var(--cream);
+  overflow-y: auto;
+  padding-top: var(--nav-h);
+}
+.page-inner {
+  min-height: calc(100vh - var(--nav-h));
+  padding: 72px 72px 80px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.section-label {
+  font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--teal); margin-bottom: 18px;
+}
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(38px, 6vw, 70px);
+  font-weight: 300; line-height: 1.08;
+  margin-bottom: 32px; max-width: 720px;
+}
+.section-body {
+  font-size: 15px; line-height: 1.85;
+  color: var(--text-mid); max-width: 540px;
+}
 
-  .pop-hint {
-    position: absolute;
-    bottom: 32px;
-    right: 48px;
-    font-size: 11px;
-    letter-spacing: .12em;
-    color: var(--text-mid);
-    opacity: 0;
-    animation: fadeUp .6s 1.2s forwards;
-    pointer-events: none;
-    text-transform: uppercase;
-  }
+/* Blind mask */
+.blind-mask {
+  background: rgba(20,20,20,.78);
+  color: transparent !important;
+  border-radius: 3px;
+  user-select: none;
+  padding: 0 3px;
+}
 
-  @keyframes fadeUp {
-    to { opacity: 1; transform: translateY(0); }
-  }
+/* Career cards */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 18px; margin-top: 44px;
+}
+.card {
+  background: rgba(126,205,200,.05);
+  border: 1px solid rgba(126,205,200,.22);
+  border-radius: 10px; padding: 22px;
+  cursor: none;
+  transition: transform .22s, box-shadow .22s;
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 12px 32px rgba(126,205,200,.16);
+}
+.card-year { font-size: 10px; letter-spacing: .09em; color: var(--teal); margin-bottom: 7px; }
+.card-title { font-family: 'Cormorant Garamond', serif; font-size: 18px; margin-bottom: 6px; }
+.card-desc { font-size: 12px; color: var(--text-mid); line-height: 1.6; }
 
-  /* ── BUBBLES ── */
-  #bubble-canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-  }
+/* Skills */
+.skills { margin-top: 44px; display: flex; flex-direction: column; gap: 20px; max-width: 500px; }
+.skill-row { display: flex; flex-direction: column; gap: 7px; }
+.skill-name { font-size: 13px; display: flex; justify-content: space-between; }
+.skill-bar { height: 3px; background: rgba(126,205,200,.14); border-radius: 99px; overflow: hidden; }
+.skill-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--teal-light));
+  border-radius: 99px; width: 0;
+  transition: width 1.3s cubic-bezier(.25,1,.5,1);
+}
+.skill-row.visible .skill-fill { width: var(--w); }
 
-  /* Pop score */
-  #score-wrap {
-    position: fixed;
-    top: calc(var(--nav-h) + 16px);
-    right: 48px;
-    z-index: 90;
-    text-align: right;
-    pointer-events: none;
-  }
-  #score-label { font-size: 10px; letter-spacing: .1em; color: var(--text-mid); text-transform: uppercase; }
-  #score-val {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 36px;
-    font-weight: 300;
-    color: var(--teal);
-    line-height: 1;
-    transition: transform .15s;
-  }
+/* Life grid */
+.life-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 14px; margin-top: 44px;
+}
+.life-item {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: rgba(126,205,200,.06);
+  border: 1px solid rgba(126,205,200,.18);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 8px; cursor: none;
+  transition: transform .2s, background .2s;
+}
+.life-item:hover { transform: scale(1.05); background: rgba(126,205,200,.13); }
+.life-icon { font-size: 26px; }
+.life-label { font-size: 12px; color: var(--text-mid); }
 
-  /* ── SECTIONS ── */
-  section {
-    min-height: 100vh;
-    padding: calc(var(--nav-h) + 80px) 72px 80px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+/* Contact */
+.contact-links { display: flex; flex-direction: column; gap: 12px; margin-top: 32px; }
+.contact-link {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 14px 26px;
+  border: 1.5px solid rgba(126,205,200,.35);
+  border-radius: 99px;
+  font-size: 13px; letter-spacing: .05em;
+  color: var(--text-dark);
+  background: none; cursor: none;
+  font-family: 'DM Sans', sans-serif;
+  width: fit-content;
+  transition: background .2s, border-color .2s, transform .2s;
+}
+.contact-link:hover {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: #fff;
+  transform: translateX(7px);
+}
 
-  section:nth-child(even) { background: var(--cream-warm); }
-  section:nth-child(odd):not(#hero) { background: var(--cream); }
+/* Pop FX */
+.pop-particle {
+  position: fixed; border-radius: 50%;
+  pointer-events: none; z-index: 600;
+  animation: pBurst .42s ease-out forwards;
+}
+@keyframes pBurst {
+  0% { transform: scale(1); opacity: .58; }
+  100% { transform: scale(4); opacity: 0; }
+}
+.pop-text {
+  position: fixed;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px; color: var(--teal);
+  pointer-events: none; z-index: 601;
+  animation: pTxt .58s ease-out forwards;
+}
+@keyframes pTxt {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-42px) scale(.7); }
+}
 
-  .section-label {
-    font-size: 10px;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--teal);
-    margin-bottom: 24px;
-  }
+.page-enter { animation: pgIn .38s ease forwards; }
+@keyframes pgIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 
-  .section-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(36px, 5vw, 64px);
-    font-weight: 300;
-    line-height: 1.1;
-    margin-bottom: 32px;
-    max-width: 720px;
-  }
-
-  .section-body {
-    font-size: 15px;
-    line-height: 1.75;
-    color: var(--text-mid);
-    max-width: 560px;
-  }
-
-  /* Cards */
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 24px;
-    margin-top: 48px;
-  }
-
-  .card {
-    background: rgba(126,205,200,.08);
-    border: 1px solid rgba(126,205,200,.3);
-    border-radius: 16px;
-    padding: 28px;
-    transition: transform .25s, box-shadow .25s;
-    cursor: none;
-  }
-  .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 40px rgba(126,205,200,.2);
-  }
-  .card-year { font-size: 11px; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
-  .card-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; margin-bottom: 8px; }
-  .card-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
-
-  /* Skill bars */
-  .skills { margin-top: 48px; display: flex; flex-direction: column; gap: 20px; max-width: 560px; }
-  .skill-row { display: flex; flex-direction: column; gap: 8px; }
-  .skill-name { font-size: 13px; letter-spacing: .04em; display: flex; justify-content: space-between; }
-  .skill-bar { height: 4px; background: rgba(126,205,200,.2); border-radius: 99px; overflow: hidden; }
-  .skill-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--teal), var(--teal-light));
-    border-radius: 99px;
-    width: 0;
-    transition: width 1.2s cubic-bezier(.25,1,.5,1);
-  }
-  .skill-row.visible .skill-fill { width: var(--w); }
-
-  /* Contact */
-  #contact { align-items: flex-start; }
-  .contact-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 32px;
-    padding: 16px 32px;
-    border: 1.5px solid var(--teal);
-    border-radius: 99px;
-    font-size: 13px;
-    letter-spacing: .06em;
-    color: var(--text-dark);
-    text-decoration: none;
-    cursor: none;
-    transition: background .2s, color .2s, transform .2s;
-  }
-  .contact-link:hover {
-    background: var(--teal);
-    color: #fff;
-    transform: translateX(6px);
-  }
-
-  /* Pop particle */
-  .pop-particle {
-    position: fixed;
-    border-radius: 50%;
-    pointer-events: none;
-    z-index: 200;
-    animation: popBurst .4s ease-out forwards;
-  }
-  @keyframes popBurst {
-    0%   { transform: scale(1); opacity: .7; }
-    100% { transform: scale(3.5); opacity: 0; }
-  }
-
-  /* Pop text */
-  .pop-text {
-    position: fixed;
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px;
-    color: var(--teal);
-    pointer-events: none;
-    z-index: 201;
-    animation: popTextAnim .6s ease-out forwards;
-  }
-  @keyframes popTextAnim {
-    0%   { opacity: 1; transform: translateY(0) scale(1); }
-    100% { opacity: 0; transform: translateY(-40px) scale(.8); }
-  }
-
-  /* Responsive */
-  @media (max-width: 640px) {
-    nav { padding: 0 20px; }
-    .nav-links { gap: 20px; }
-    section { padding: calc(var(--nav-h) + 40px) 24px 40px; }
-    .hero-text { left: 24px; bottom: 60px; }
-    #score-wrap { right: 24px; }
-  }
+@media (max-width: 600px) {
+  #navbar { padding: 0 20px; }
+  .nav-links { gap: 14px; }
+  .page-inner { padding: 44px 22px 60px; }
+  .entry-choices { flex-direction: column; }
+}
 </style>
 </head>
 <body>
@@ -322,336 +398,424 @@
 <div id="cursor"></div>
 
 <!-- NAVBAR -->
-<nav>
-  <a class="nav-logo" href="#hero">zzb19yk</a>
+<nav id="navbar">
+  <button class="nav-logo" onclick="goTo('main')">zzb19yk</button>
   <ul class="nav-links">
-    <li><a href="#about">소개</a></li>
-    <li><a href="#career">커리어</a></li>
-    <li><a href="#skills">역량</a></li>
-    <li><a href="#life">개인적 삶</a></li>
-    <li><a href="#contact">연락처</a></li>
+    <li><button onclick="goTo('about')">소개</button></li>
+    <li><button onclick="goTo('career')">커리어</button></li>
+    <li><button onclick="goTo('skills')">역량</button></li>
+    <li><button onclick="goTo('life')">개인적 삶</button></li>
+    <li><button onclick="goTo('contact')">연락처</button></li>
   </ul>
+  <button class="mode-badge" id="mode-badge" onclick="resetEntry()">— / —</button>
 </nav>
 
-<!-- SCORE -->
-<div id="score-wrap">
-  <div class="score-label">버블 터뜨리기</div>
-  <div id="score-val">0</div>
+<!-- ① ENTRY -->
+<div class="view" id="view-entry">
+  <div class="entry-glow"></div>
+  <p class="entry-label">Portfolio · zzb19yk</p>
+  <h1 class="entry-title">어떻게 보실건가요?</h1>
+  <p class="entry-sub">공개 범위를 선택해주세요</p>
+  <div class="entry-choices">
+    <button class="entry-btn" onclick="selectMode('blind')">
+      <div class="eb-mode">Mode 01</div>
+      <div class="eb-title">Blind</div>
+      <div class="eb-desc">이름, 학력, 연락처,<br>별명이 비공개됩니다.</div>
+      <span class="eb-arrow">↗</span>
+    </button>
+    <button class="entry-btn" onclick="selectMode('open')">
+      <div class="eb-mode">Mode 02</div>
+      <div class="eb-title">Open</div>
+      <div class="eb-desc">이름, 학력, 연락처,<br>별명이 공개됩니다.</div>
+      <span class="eb-arrow">↗</span>
+    </button>
+  </div>
 </div>
 
-<!-- HERO -->
-<section id="hero">
+<!-- ② MAIN / BUBBLES -->
+<div class="view" id="view-main">
   <canvas id="bubble-canvas"></canvas>
-  <div class="hero-text">
-    <h1>안녕하세요,<br>저는 <em>zzb19yk</em>입니다.</h1>
-    <p>본 페이지는 AI를 이용해 생성하였습니다.</p>
+  <div class="bubble-hint">버블을 클릭해 터뜨려보세요</div>
+  <div id="score-wrap">
+    <div id="score-label">팡!</div>
+    <div id="score-val">0</div>
   </div>
-  <div class="pop-hint">버블을 클릭해 터뜨려보세요 ↗</div>
-</section>
+</div>
 
-<!-- 소개 -->
-<section id="about">
-  <div class="section-label">About</div>
-  <h2 class="section-title">저는 이런 사람입니다.</h2>
-  <p class="section-body">
-    자기소개를 자유롭게 작성해보세요.<br>
-    관심사, 가치관, 일하는 방식 등을 담으면 좋습니다.<br>
-    두세 문단 정도로 자연스럽게 써주세요.
-  </p>
-</section>
-
-<!-- 커리어 -->
-<section id="career">
-  <div class="section-label">Career</div>
-  <h2 class="section-title">걸어온 길.</h2>
-  <div class="cards">
-    <div class="card">
-      <div class="card-year">2024 — 현재</div>
-      <div class="card-title">직책 · 회사명</div>
-      <div class="card-desc">주요 업무나 프로젝트 내용을 간략히 작성해주세요.</div>
-    </div>
-    <div class="card">
-      <div class="card-year">2022 — 2024</div>
-      <div class="card-title">직책 · 회사명</div>
-      <div class="card-desc">주요 업무나 프로젝트 내용을 간략히 작성해주세요.</div>
-    </div>
-    <div class="card">
-      <div class="card-year">2020 — 2022</div>
-      <div class="card-title">직책 · 회사명</div>
-      <div class="card-desc">주요 업무나 프로젝트 내용을 간략히 작성해주세요.</div>
-    </div>
-    <div class="card">
-      <div class="card-year">2016 — 2020</div>
-      <div class="card-title">학교명 · 전공</div>
-      <div class="card-desc">학위 및 주요 활동을 간략히 작성해주세요.</div>
-    </div>
+<!-- ③ 소개 -->
+<div class="view content-view" id="view-about">
+  <div class="page-inner">
+    <div class="section-label">About</div>
+    <h2 class="section-title">저는 이런 사람입니다.</h2>
+    <p class="section-body">
+      자기소개를 자유롭게 작성해보세요.<br>
+      관심사, 가치관, 일하는 방식 등을 담으면 좋습니다.<br><br>
+      이름 &nbsp;/ &nbsp;<span class="blind-field">홍길동</span><br>
+      별명 &nbsp;/ &nbsp;<span class="blind-field">zzb19yk</span>
+    </p>
   </div>
-</section>
+</div>
 
-<!-- 역량 -->
-<section id="skills">
-  <div class="section-label">Skills</div>
-  <h2 class="section-title">할 수 있는 것들.</h2>
-  <div class="skills">
-    <div class="skill-row" style="--w:90%">
-      <div class="skill-name"><span>스킬 1</span><span>90%</span></div>
-      <div class="skill-bar"><div class="skill-fill"></div></div>
-    </div>
-    <div class="skill-row" style="--w:80%">
-      <div class="skill-name"><span>스킬 2</span><span>80%</span></div>
-      <div class="skill-bar"><div class="skill-fill"></div></div>
-    </div>
-    <div class="skill-row" style="--w:75%">
-      <div class="skill-name"><span>스킬 3</span><span>75%</span></div>
-      <div class="skill-bar"><div class="skill-fill"></div></div>
-    </div>
-    <div class="skill-row" style="--w:65%">
-      <div class="skill-name"><span>스킬 4</span><span>65%</span></div>
-      <div class="skill-bar"><div class="skill-fill"></div></div>
+<!-- ④ 커리어 -->
+<div class="view content-view" id="view-career">
+  <div class="page-inner">
+    <div class="section-label">Career</div>
+    <h2 class="section-title">걸어온 길.</h2>
+    <div class="cards">
+      <div class="card">
+        <div class="card-year">2024 — 현재</div>
+        <div class="card-title">직책 · 회사명</div>
+        <div class="card-desc">주요 업무나 프로젝트를 간략히 작성해주세요.</div>
+      </div>
+      <div class="card">
+        <div class="card-year">2022 — 2024</div>
+        <div class="card-title">직책 · 회사명</div>
+        <div class="card-desc">주요 업무나 프로젝트를 간략히 작성해주세요.</div>
+      </div>
+      <div class="card">
+        <div class="card-year">2020 — 2022</div>
+        <div class="card-title">직책 · 회사명</div>
+        <div class="card-desc">주요 업무나 프로젝트를 간략히 작성해주세요.</div>
+      </div>
+      <div class="card">
+        <div class="card-year">2016 — 2020</div>
+        <div class="card-title"><span class="blind-field">학교명</span> · 전공</div>
+        <div class="card-desc">학위 및 주요 활동을 간략히 작성해주세요.</div>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- 개인적 삶 -->
-<section id="life">
-  <div class="section-label">Life</div>
-  <h2 class="section-title">일 밖의 나.</h2>
-  <p class="section-body">
-    취미, 관심사, 요즘 빠져있는 것들을 편하게 적어보세요.<br>
-    사진이나 여행 이야기, 독서 목록 등 개인적인 이야기도 좋습니다.
-  </p>
-</section>
+<!-- ⑤ 역량 -->
+<div class="view content-view" id="view-skills">
+  <div class="page-inner">
+    <div class="section-label">Skills</div>
+    <h2 class="section-title">할 수 있는 것들.</h2>
+    <div class="skills">
+      <div class="skill-row" style="--w:90%">
+        <div class="skill-name"><span>스킬 1</span><span>90%</span></div>
+        <div class="skill-bar"><div class="skill-fill"></div></div>
+      </div>
+      <div class="skill-row" style="--w:80%">
+        <div class="skill-name"><span>스킬 2</span><span>80%</span></div>
+        <div class="skill-bar"><div class="skill-fill"></div></div>
+      </div>
+      <div class="skill-row" style="--w:75%">
+        <div class="skill-name"><span>스킬 3</span><span>75%</span></div>
+        <div class="skill-bar"><div class="skill-fill"></div></div>
+      </div>
+      <div class="skill-row" style="--w:65%">
+        <div class="skill-name"><span>스킬 4</span><span>65%</span></div>
+        <div class="skill-bar"><div class="skill-fill"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
 
-<!-- 연락처 -->
-<section id="contact">
-  <div class="section-label">Contact</div>
-  <h2 class="section-title">함께 이야기해요.</h2>
-  <p class="section-body">새로운 기회나 협업에 대해 언제든 연락 주세요.</p>
-  <a class="contact-link" href="mailto:zzb19yk@gmail.com">
-    <span>✉</span> zzb19yk@gmail.com
-  </a>
-  <a class="contact-link" href="https://github.com/zzb19yk" target="_blank" style="margin-top:12px">
-    <span>↗</span> GitHub
-  </a>
-</section>
+<!-- ⑥ 개인적 삶 -->
+<div class="view content-view" id="view-life">
+  <div class="page-inner">
+    <div class="section-label">Life</div>
+    <h2 class="section-title">일 밖의 나.</h2>
+    <p class="section-body">취미, 관심사, 요즘 빠져있는 것들을 편하게 적어보세요.</p>
+    <div class="life-grid">
+      <div class="life-item"><div class="life-icon">📚</div><div class="life-label">독서</div></div>
+      <div class="life-item"><div class="life-icon">🎵</div><div class="life-label">음악</div></div>
+      <div class="life-item"><div class="life-icon">✈️</div><div class="life-label">여행</div></div>
+      <div class="life-item"><div class="life-icon">🍳</div><div class="life-label">요리</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑦ 연락처 -->
+<div class="view content-view" id="view-contact">
+  <div class="page-inner">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title">함께 이야기해요.</h2>
+    <p class="section-body">새로운 기회나 협업에 대해 언제든 연락 주세요.</p>
+    <div class="contact-links">
+      <button class="contact-link" id="email-btn">
+        <span>✉</span>
+        <span class="blind-field" id="email-text">your@email.com</span>
+      </button>
+      <button class="contact-link" onclick="window.open('https://github.com/zzb19yk','_blank')">
+        <span>↗</span> GitHub
+      </button>
+    </div>
+  </div>
+</div>
 
 <script>
+// ── STATE ──
+let _mode = null;
+let _currentView = 'entry';
+let _score = 0;
+
 // ── CURSOR ──
-const cursor = document.getElementById('cursor');
-let mx = -100, my = -100;
+const cursorEl = document.getElementById('cursor');
+let mx = -200, my = -200;
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
+  cursorEl.style.left = mx + 'px';
+  cursorEl.style.top = my + 'px';
 });
-document.querySelectorAll('a, .card').forEach(el => {
-  el.addEventListener('mouseenter', () => cursor.classList.add('big'));
-  el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+document.addEventListener('mouseover', e => {
+  if (e.target.closest('button,.card,.life-item,a')) cursorEl.classList.add('big');
+  else cursorEl.classList.remove('big');
 });
+
+// ── VIEW ROUTER ──
+function showView(id) {
+  // hide all
+  document.querySelectorAll('.view').forEach(v => {
+    v.classList.remove('visible');
+    setTimeout(() => {
+      if (!v.classList.contains('visible')) {
+        v.classList.remove('active');
+      }
+    }, 460);
+  });
+
+  const el = document.getElementById('view-' + id);
+  el.classList.add('active');
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+
+  _currentView = id;
+  const isEntry = id === 'entry';
+  document.getElementById('navbar').classList.toggle('show', !isEntry);
+
+  // active nav highlight
+  const labels = { about:'소개', career:'커리어', skills:'역량', life:'개인적 삶', contact:'연락처' };
+  document.querySelectorAll('.nav-links button').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === (labels[id] || ''));
+  });
+
+  // skill bar trigger
+  if (id === 'skills') {
+    setTimeout(() => document.querySelectorAll('.skill-row').forEach(r => r.classList.add('visible')), 220);
+  }
+
+  // page animation
+  if (!isEntry && id !== 'main') {
+    const inner = el.querySelector('.page-inner');
+    if (inner) { inner.classList.remove('page-enter'); void inner.offsetWidth; inner.classList.add('page-enter'); }
+  }
+
+  if (id === 'main') setTimeout(resizeCanvas, 30);
+}
+
+function goTo(id) { showView(id); }
+
+function resetEntry() {
+  _mode = null;
+  document.getElementById('navbar').classList.remove('show');
+  showView('entry');
+}
+
+// ── MODE ──
+function selectMode(mode) {
+  _mode = mode;
+
+  // apply blind/open to .blind-field elements
+  document.querySelectorAll('.blind-field').forEach(el => {
+    el.classList.toggle('blind-mask', mode === 'blind');
+  });
+
+  // email button action
+  document.getElementById('email-btn').onclick = () => {
+    if (mode === 'open') location.href = 'mailto:your@email.com';
+  };
+
+  document.getElementById('mode-badge').textContent = mode === 'blind' ? '🔒 Blind' : '🔓 Open';
+
+  // animate out entry
+  const entry = document.getElementById('view-entry');
+  entry.classList.remove('visible');
+  setTimeout(() => {
+    entry.classList.remove('active');
+    showView('main');
+  }, 460);
+}
 
 // ── BUBBLES ──
 const canvas = document.getElementById('bubble-canvas');
 const ctx = canvas.getContext('2d');
-let W, H, bubbles = [], score = 0;
+let W = 0, H = 0, bubbles = [];
 
-const POP_WORDS = ['팡!', 'Pop!', '뻥!', '펑!', '빵!'];
-
-function resize() {
-  W = canvas.width = canvas.offsetWidth;
-  H = canvas.height = canvas.offsetHeight;
+function resizeCanvas() {
+  W = canvas.width = canvas.offsetWidth || window.innerWidth;
+  H = canvas.height = canvas.offsetHeight || window.innerHeight;
 }
-window.addEventListener('resize', resize);
-resize();
+window.addEventListener('resize', resizeCanvas);
 
-function randBetween(a, b) { return a + Math.random() * (b - a); }
+function rnd(a, b) { return a + Math.random() * (b - a); }
 
 class Bubble {
   constructor(x, y, r) {
-    this.x = x ?? randBetween(r, W - r);
-    this.y = y ?? randBetween(r, H - r);
-    this.r = r ?? randBetween(20, 110);
-    this.baseR = this.r;
-    this.vx = randBetween(-.25, .25);
-    this.vy = randBetween(-.18, -.05);
-    this.opacity = randBetween(.55, .85);
-    this.hue = randBetween(168, 188); // teal range
-    this.shimmerOffset = Math.random() * Math.PI * 2;
-    this.wobble = 0;
+    this.x = (x !== undefined) ? x : rnd(0, W || window.innerWidth);
+    this.y = (y !== undefined) ? y : rnd(0, H || window.innerHeight);
+    this.r = (r !== undefined) ? r : rnd(16, 108);
+    this.vx = rnd(-.22, .22);
+    this.vy = rnd(-.2, -.04);
+    this.opacity = rnd(.48, .82);
+    this.hue = rnd(166, 192);
+    this.phase = Math.random() * Math.PI * 2;
+    this._w = 0;
     this.alive = true;
     this.popping = false;
-    this.popProgress = 0;
-    // mouse repulsion
-    this.repulseVx = 0;
-    this.repulseVy = 0;
+    this.popT = 0;
+    this.rx = 0; this.ry = 0;
   }
 
-  applyMouse(mx, my) {
-    const dx = this.x - mx, dy = this.y - my;
-    const dist = Math.sqrt(dx * dx + dy * dy);
-    const influence = this.r * 2.5;
-    if (dist < influence && dist > 0) {
-      const force = (1 - dist / influence) * 1.8;
-      this.repulseVx += (dx / dist) * force;
-      this.repulseVy += (dy / dist) * force;
+  mouse(px, py) {
+    const dx = this.x - px, dy = this.y - py;
+    const d = Math.hypot(dx, dy);
+    const zone = this.r * 2.8;
+    if (d < zone && d > 1) {
+      const f = (1 - d/zone) * 1.7;
+      this.rx += dx/d * f;
+      this.ry += dy/d * f;
     }
   }
 
   update(t) {
     if (this.popping) {
-      this.popProgress += .06;
-      if (this.popProgress >= 1) this.alive = false;
+      this.popT += .06;
+      if (this.popT >= 1) this.alive = false;
       return;
     }
-    this.x += this.vx + this.repulseVx;
-    this.y += this.vy + this.repulseVy;
-    this.repulseVx *= .88;
-    this.repulseVy *= .88;
-    this.wobble = Math.sin(t * .001 + this.shimmerOffset) * 2;
-    // wrap
-    if (this.x < -this.r * 2) this.x = W + this.r;
-    if (this.x > W + this.r * 2) this.x = -this.r;
-    if (this.y < -this.r * 2) this.y = H + this.r;
-    if (this.y > H + this.r * 2) this.y = -this.r;
+    this.x += this.vx + this.rx;
+    this.y += this.vy + this.ry;
+    this.rx *= .86; this.ry *= .86;
+    this._w = Math.sin(t * .0009 + this.phase) * 1.8;
+    const pad = this.r * 1.5;
+    if (this.x < -pad) this.x = W + pad;
+    if (this.x > W + pad) this.x = -pad;
+    if (this.y < -pad) this.y = H + pad;
+    if (this.y > H + pad) this.y = -pad;
   }
 
-  draw(t) {
+  draw() {
     if (!this.alive) return;
-    const r = this.r + this.wobble;
-    const popScale = this.popping ? 1 + this.popProgress * .5 : 1;
-    const popAlpha = this.popping ? 1 - this.popProgress : 1;
+    const r = this.r + this._w;
+    const ps = this.popping ? 1 + this.popT * .65 : 1;
+    const pa = this.popping ? 1 - this.popT : 1;
+
     ctx.save();
-    ctx.globalAlpha = this.opacity * popAlpha;
+    ctx.globalAlpha = this.opacity * pa;
     ctx.translate(this.x, this.y);
-    ctx.scale(popScale, popScale);
+    ctx.scale(ps, ps);
 
-    // outer glow
-    const glow = ctx.createRadialGradient(0, 0, r * .6, 0, 0, r * 1.05);
-    glow.addColorStop(0, `hsla(${this.hue},50%,80%,0)`);
-    glow.addColorStop(1, `hsla(${this.hue},60%,75%,.18)`);
-    ctx.beginPath();
-    ctx.arc(0, 0, r * 1.1, 0, Math.PI * 2);
-    ctx.fillStyle = glow;
-    ctx.fill();
+    // halo
+    const halo = ctx.createRadialGradient(0,0,r*.5, 0,0,r*1.25);
+    halo.addColorStop(0, `hsla(${this.hue},55%,82%,0)`);
+    halo.addColorStop(1, `hsla(${this.hue},60%,78%,.13)`);
+    ctx.beginPath(); ctx.arc(0,0,r*1.25,0,Math.PI*2);
+    ctx.fillStyle = halo; ctx.fill();
 
-    // bubble fill
-    const fill = ctx.createRadialGradient(-r * .25, -r * .3, r * .05, 0, 0, r);
-    fill.addColorStop(0, `hsla(${this.hue - 5},60%,92%,.45)`);
-    fill.addColorStop(.5, `hsla(${this.hue},45%,80%,.22)`);
-    fill.addColorStop(1, `hsla(${this.hue + 8},55%,72%,.08)`);
-    ctx.beginPath();
-    ctx.arc(0, 0, r, 0, Math.PI * 2);
-    ctx.fillStyle = fill;
-    ctx.fill();
+    // body
+    const body = ctx.createRadialGradient(-r*.2,-r*.25,r*.03, 0,0,r);
+    body.addColorStop(0, `hsla(${this.hue-4},60%,94%,.52)`);
+    body.addColorStop(.5, `hsla(${this.hue},44%,82%,.25)`);
+    body.addColorStop(1, `hsla(${this.hue+6},52%,74%,.06)`);
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2);
+    ctx.fillStyle = body; ctx.fill();
 
     // rim
-    ctx.beginPath();
-    ctx.arc(0, 0, r, 0, Math.PI * 2);
-    ctx.strokeStyle = `hsla(${this.hue},55%,85%,.5)`;
-    ctx.lineWidth = .8;
-    ctx.stroke();
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2);
+    ctx.strokeStyle = `hsla(${this.hue},50%,88%,.52)`;
+    ctx.lineWidth = .8; ctx.stroke();
 
-    // top highlight
-    const shine = ctx.createRadialGradient(-r * .3, -r * .35, 0, -r * .25, -r * .3, r * .45);
-    shine.addColorStop(0, `hsla(${this.hue - 10},80%,98%,.7)`);
-    shine.addColorStop(1, `hsla(${this.hue},70%,92%,0)`);
+    // shine
+    const sh = ctx.createRadialGradient(-r*.28,-r*.32,0, -r*.22,-r*.28,r*.42);
+    sh.addColorStop(0, `hsla(${this.hue-8},85%,99%,.74)`);
+    sh.addColorStop(1, `hsla(${this.hue},70%,94%,0)`);
     ctx.beginPath();
-    ctx.ellipse(-r * .3, -r * .35, r * .28, r * .18, -.4, 0, Math.PI * 2);
-    ctx.fillStyle = shine;
-    ctx.fill();
+    ctx.ellipse(-r*.28,-r*.33,r*.26,r*.17,-.35,0,Math.PI*2);
+    ctx.fillStyle = sh; ctx.fill();
 
-    // small accent dot
+    // dot
     ctx.beginPath();
-    ctx.arc(-r * .38, -r * .42, r * .06, 0, Math.PI * 2);
-    ctx.fillStyle = `hsla(${this.hue - 10},90%,99%,.9)`;
-    ctx.fill();
+    ctx.arc(-r*.36,-r*.4,r*.055,0,Math.PI*2);
+    ctx.fillStyle = 'rgba(255,255,255,.92)'; ctx.fill();
 
     ctx.restore();
   }
 
-  contains(px, py) {
-    return Math.hypot(this.x - px, this.y - py) < this.r;
+  hit(px, py) { return Math.hypot(this.x-px, this.y-py) < this.r; }
+}
+
+function spawnInitial() {
+  for (let i = 0; i < 24; i++) {
+    setTimeout(() => bubbles.push(new Bubble()), i * 55);
   }
 }
 
-// spawn bubbles
-function spawnBubbles(n = 18) {
-  for (let i = 0; i < n; i++) {
-    setTimeout(() => bubbles.push(new Bubble()), i * 80);
-  }
-}
-spawnBubbles();
-
-// maintain minimum count
-function maintainBubbles() {
+function maintain() {
   bubbles = bubbles.filter(b => b.alive);
-  while (bubbles.length < 14) {
-    bubbles.push(new Bubble(randBetween(0, W), H + 80, randBetween(20, 110)));
+  while (bubbles.length < 16) {
+    bubbles.push(new Bubble(rnd(0,W), H + rnd(30,90), rnd(16,108)));
   }
 }
 
-// click to pop
 canvas.addEventListener('click', e => {
+  if (_currentView !== 'main') return;
   const rect = canvas.getBoundingClientRect();
-  const cx = e.clientX - rect.left;
-  const cy = e.clientY - rect.top;
-  let popped = false;
-  // pop the smallest bubble under cursor first
-  const hits = bubbles.filter(b => !b.popping && b.contains(cx, cy));
-  if (hits.length) {
-    hits.sort((a, b) => a.r - b.r);
-    const b = hits[0];
-    b.popping = true;
-    popped = true;
-    score++;
-    document.getElementById('score-val').textContent = score;
-    // score bounce
-    const sv = document.getElementById('score-val');
-    sv.style.transform = 'scale(1.4)';
-    setTimeout(() => sv.style.transform = '', 200);
-    // pop ripple
-    spawnPopParticle(e.clientX, e.clientY, b.r, b.hue);
-    spawnPopText(e.clientX, e.clientY);
-  }
+  const cx = e.clientX - rect.left, cy = e.clientY - rect.top;
+  const hits = bubbles.filter(b => !b.popping && b.hit(cx, cy));
+  if (!hits.length) return;
+  hits.sort((a,b) => a.r - b.r);
+  const b = hits[0];
+  b.popping = true;
+  _score++;
+  const sv = document.getElementById('score-val');
+  sv.textContent = _score;
+  sv.style.transform = 'scale(1.55)';
+  setTimeout(() => sv.style.transform = '', 170);
+  popFX(e.clientX, e.clientY, b.r, b.hue);
 });
 
-function spawnPopParticle(x, y, r, hue) {
-  const el = document.createElement('div');
-  el.className = 'pop-particle';
-  el.style.cssText = `left:${x - r}px;top:${y - r}px;width:${r*2}px;height:${r*2}px;
-    background:radial-gradient(circle, hsla(${hue},60%,85%,.6), transparent 70%);`;
-  document.body.appendChild(el);
-  el.addEventListener('animationend', () => el.remove());
+const POP_W = ['팡!','뻥!','펑!','Pop!','빵!','퐁!'];
+function popFX(x, y, r, hue) {
+  const p = document.createElement('div');
+  p.className = 'pop-particle';
+  p.style.cssText = `left:${x-r}px;top:${y-r}px;width:${r*2}px;height:${r*2}px;
+    background:radial-gradient(circle,hsla(${hue},55%,82%,.5),transparent 70%)`;
+  document.body.appendChild(p);
+  p.addEventListener('animationend', () => p.remove());
+
+  const t = document.createElement('div');
+  t.className = 'pop-text';
+  t.textContent = POP_W[Math.floor(Math.random()*POP_W.length)];
+  t.style.cssText = `left:${x-16}px;top:${y-16}px`;
+  document.body.appendChild(t);
+  t.addEventListener('animationend', () => t.remove());
 }
 
-function spawnPopText(x, y) {
-  const el = document.createElement('div');
-  el.className = 'pop-text';
-  el.textContent = POP_WORDS[Math.floor(Math.random() * POP_WORDS.length)];
-  el.style.cssText = `left:${x - 20}px;top:${y - 20}px;`;
-  document.body.appendChild(el);
-  el.addEventListener('animationend', () => el.remove());
-}
-
-let lastMaintain = 0;
+let lastM = 0;
 function loop(t) {
-  ctx.clearRect(0, 0, W, H);
-  if (t - lastMaintain > 2000) { maintainBubbles(); lastMaintain = t; }
-  bubbles.forEach(b => {
-    if (!b.popping) b.applyMouse(mx - canvas.getBoundingClientRect().left, my - canvas.getBoundingClientRect().top);
-    b.update(t);
-    b.draw(t);
-  });
+  if (_currentView === 'main' && W > 0 && H > 0) {
+    ctx.clearRect(0, 0, W, H);
+    if (t - lastM > 1800) { maintain(); lastM = t; }
+    const rect = canvas.getBoundingClientRect();
+    const lx = mx - rect.left, ly = my - rect.top;
+    bubbles.forEach(b => {
+      if (!b.popping) b.mouse(lx, ly);
+      b.update(t);
+      b.draw();
+    });
+  }
   requestAnimationFrame(loop);
 }
 requestAnimationFrame(loop);
 
-// ── SKILL BAR OBSERVER ──
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) e.target.classList.add('visible');
-  });
-}, { threshold: .3 });
-document.querySelectorAll('.skill-row').forEach(r => observer.observe(r));
+// ── INIT ──
+// Pre-size canvas while hidden so bubbles are ready
+window.addEventListener('load', () => {
+  resizeCanvas();
+  spawnInitial();
+});
+showView('entry');
 </script>
 </body>
 </html>
