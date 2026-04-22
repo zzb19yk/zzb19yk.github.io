@@ -1,6 +1,657 @@
----
-layout: home
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
----
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  :root {
+    --teal: #7ecdc8;
+    --teal-light: #a8deda;
+    --cream: #fdfbf4;
+    --cream-warm: #f5f0e8;
+    --text-dark: #1a1a1a;
+    --text-mid: #555;
+    --nav-h: 64px;
+  }
 
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text-dark);
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* ── CURSOR ── */
+  #cursor {
+    position: fixed;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--teal);
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width .15s, height .15s, background .15s;
+    mix-blend-mode: multiply;
+  }
+  #cursor.big {
+    width: 40px; height: 40px;
+    background: rgba(126,205,200,.35);
+  }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 48px;
+    z-index: 100;
+    background: rgba(253,251,244,.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(126,205,200,.2);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: .08em;
+    color: var(--text-dark);
+    text-decoration: none;
+    cursor: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    font-weight: 400;
+    letter-spacing: .06em;
+    color: var(--text-mid);
+    text-decoration: none;
+    cursor: none;
+    position: relative;
+    transition: color .2s;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--teal);
+    transition: width .25s ease;
+  }
+  .nav-links a:hover { color: var(--text-dark); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* ── HERO ── */
+  #hero {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #b8e8e4 0%, #d4f0ed 30%, #fdfbf4 70%, #faf5e8 100%);
+  }
+
+  .hero-text {
+    position: absolute;
+    bottom: 80px;
+    left: 72px;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .hero-text h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 7vw, 96px);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -.01em;
+    color: var(--text-dark);
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeUp .8s .4s forwards;
+  }
+  .hero-text h1 em {
+    font-style: italic;
+    color: var(--teal);
+  }
+  .hero-text p {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--text-mid);
+    letter-spacing: .04em;
+    opacity: 0;
+    animation: fadeUp .8s .65s forwards;
+  }
+
+  .pop-hint {
+    position: absolute;
+    bottom: 32px;
+    right: 48px;
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: var(--text-mid);
+    opacity: 0;
+    animation: fadeUp .6s 1.2s forwards;
+    pointer-events: none;
+    text-transform: uppercase;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── BUBBLES ── */
+  #bubble-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Pop score */
+  #score-wrap {
+    position: fixed;
+    top: calc(var(--nav-h) + 16px);
+    right: 48px;
+    z-index: 90;
+    text-align: right;
+    pointer-events: none;
+  }
+  #score-label { font-size: 10px; letter-spacing: .1em; color: var(--text-mid); text-transform: uppercase; }
+  #score-val {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--teal);
+    line-height: 1;
+    transition: transform .15s;
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    min-height: 100vh;
+    padding: calc(var(--nav-h) + 80px) 72px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  section:nth-child(even) { background: var(--cream-warm); }
+  section:nth-child(odd):not(#hero) { background: var(--cream); }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 32px;
+    max-width: 720px;
+  }
+
+  .section-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--text-mid);
+    max-width: 560px;
+  }
+
+  /* Cards */
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .card {
+    background: rgba(126,205,200,.08);
+    border: 1px solid rgba(126,205,200,.3);
+    border-radius: 16px;
+    padding: 28px;
+    transition: transform .25s, box-shadow .25s;
+    cursor: none;
+  }
+  .card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(126,205,200,.2);
+  }
+  .card-year { font-size: 11px; letter-spacing: .1em; color: var(--teal); margin-bottom: 10px; }
+  .card-title { font-family: 'Cormorant Garamond', serif; font-size: 20px; margin-bottom: 8px; }
+  .card-desc { font-size: 13px; color: var(--text-mid); line-height: 1.6; }
+
+  /* Skill bars */
+  .skills { margin-top: 48px; display: flex; flex-direction: column; gap: 20px; max-width: 560px; }
+  .skill-row { display: flex; flex-direction: column; gap: 8px; }
+  .skill-name { font-size: 13px; letter-spacing: .04em; display: flex; justify-content: space-between; }
+  .skill-bar { height: 4px; background: rgba(126,205,200,.2); border-radius: 99px; overflow: hidden; }
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--teal-light));
+    border-radius: 99px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(.25,1,.5,1);
+  }
+  .skill-row.visible .skill-fill { width: var(--w); }
+
+  /* Contact */
+  #contact { align-items: flex-start; }
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 32px;
+    padding: 16px 32px;
+    border: 1.5px solid var(--teal);
+    border-radius: 99px;
+    font-size: 13px;
+    letter-spacing: .06em;
+    color: var(--text-dark);
+    text-decoration: none;
+    cursor: none;
+    transition: background .2s, color .2s, transform .2s;
+  }
+  .contact-link:hover {
+    background: var(--teal);
+    color: #fff;
+    transform: translateX(6px);
+  }
+
+  /* Pop particle */
+  .pop-particle {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 200;
+    animation: popBurst .4s ease-out forwards;
+  }
+  @keyframes popBurst {
+    0%   { transform: scale(1); opacity: .7; }
+    100% { transform: scale(3.5); opacity: 0; }
+  }
+
+  /* Pop text */
+  .pop-text {
+    position: fixed;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+    color: var(--teal);
+    pointer-events: none;
+    z-index: 201;
+    animation: popTextAnim .6s ease-out forwards;
+  }
+  @keyframes popTextAnim {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-40px) scale(.8); }
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    nav { padding: 0 20px; }
+    .nav-links { gap: 20px; }
+    section { padding: calc(var(--nav-h) + 40px) 24px 40px; }
+    .hero-text { left: 24px; bottom: 60px; }
+    #score-wrap { right: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="cursor"></div>
+
+<!-- NAVBAR -->
+<nav>
+  <a class="nav-logo" href="#hero">zzb19yk</a>
+  <ul class="nav-links">
+    <li><a href="#about">소개</a></li>
+    <li><a href="#career">커리어</a></li>
+    <li><a href="#skills">역량</a></li>
+    <li><a href="#life">개인적 삶</a></li>
+    <li><a href="#contact">연락처</a></li>
+  </ul>
+</nav>
+
+<!-- SCORE -->
+<div id="score-wrap">
+  <div class="score-label">버블 터뜨리기</div>
+  <div id="score-val">0</div>
+</div>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="bubble-canvas"></canvas>
+  <div class="hero-text">
+    <h1>안녕하세요,<br>저는 <em>zzb19yk</em>입니다.</h1>
+    <p>본 페이지는 AI를 이용해 생성하였습니다.</p>
+  </div>
+  <div class="pop-hint">버블을 클릭해 터뜨려보세요 ↗</div>
+</section>
+
+<!-- 소개 -->
+<section id="about">
+  <div class="section-label">About</div>
+  <h2 class="section-title">저는 이런 사람입니다.</h2>
+  <p class="section-body">
+    자기소개를 자유롭게 작성해보세요.<br>
+    관심사, 가치관, 일하는 방식 등을 담으면 좋습니다.<br>
+    두세 문단 정도로 자연스럽게 써주세요.
+  </p>
+</section>
+
+<!-- 커리어 -->
+<section id="career">
+  <div class="section-label">Career</div>
+  <h2 class="section-title">걸어온 길.</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-year">2024 — 현재</div>
+      <div class="card-title">직책 · 회사명</div>
+      <div class="card-desc">주요 업무나 프로젝트 내용을 간략히 작성해주세요.</div>
+    </div>
+    <div class="card">
+      <div class="card-year">2022 — 2024</div>
+      <div class="card-title">직책 · 회사명</div>
+      <div class="card-desc">주요 업무나 프로젝트 내용을 간략히 작성해주세요.</div>
+    </div>
+    <div class="card">
+      <div class="card-year">2020 — 2022</div>
+      <div class="card-title">직책 · 회사명</div>
+      <div class="card-desc">주요 업무나 프로젝트 내용을 간략히 작성해주세요.</div>
+    </div>
+    <div class="card">
+      <div class="card-year">2016 — 2020</div>
+      <div class="card-title">학교명 · 전공</div>
+      <div class="card-desc">학위 및 주요 활동을 간략히 작성해주세요.</div>
+    </div>
+  </div>
+</section>
+
+<!-- 역량 -->
+<section id="skills">
+  <div class="section-label">Skills</div>
+  <h2 class="section-title">할 수 있는 것들.</h2>
+  <div class="skills">
+    <div class="skill-row" style="--w:90%">
+      <div class="skill-name"><span>스킬 1</span><span>90%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+    <div class="skill-row" style="--w:80%">
+      <div class="skill-name"><span>스킬 2</span><span>80%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+    <div class="skill-row" style="--w:75%">
+      <div class="skill-name"><span>스킬 3</span><span>75%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+    <div class="skill-row" style="--w:65%">
+      <div class="skill-name"><span>스킬 4</span><span>65%</span></div>
+      <div class="skill-bar"><div class="skill-fill"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- 개인적 삶 -->
+<section id="life">
+  <div class="section-label">Life</div>
+  <h2 class="section-title">일 밖의 나.</h2>
+  <p class="section-body">
+    취미, 관심사, 요즘 빠져있는 것들을 편하게 적어보세요.<br>
+    사진이나 여행 이야기, 독서 목록 등 개인적인 이야기도 좋습니다.
+  </p>
+</section>
+
+<!-- 연락처 -->
+<section id="contact">
+  <div class="section-label">Contact</div>
+  <h2 class="section-title">함께 이야기해요.</h2>
+  <p class="section-body">새로운 기회나 협업에 대해 언제든 연락 주세요.</p>
+  <a class="contact-link" href="mailto:your@email.com">
+    <span>✉</span> your@email.com
+  </a>
+  <a class="contact-link" href="https://github.com/zzb19yk" target="_blank" style="margin-top:12px">
+    <span>↗</span> GitHub
+  </a>
+</section>
+
+<script>
+// ── CURSOR ──
+const cursor = document.getElementById('cursor');
+let mx = -100, my = -100;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
+});
+document.querySelectorAll('a, .card').forEach(el => {
+  el.addEventListener('mouseenter', () => cursor.classList.add('big'));
+  el.addEventListener('mouseleave', () => cursor.classList.remove('big'));
+});
+
+// ── BUBBLES ──
+const canvas = document.getElementById('bubble-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, bubbles = [], score = 0;
+
+const POP_WORDS = ['팡!', 'Pop!', '뻥!', '펑!', '빵!'];
+
+function resize() {
+  W = canvas.width = canvas.offsetWidth;
+  H = canvas.height = canvas.offsetHeight;
+}
+window.addEventListener('resize', resize);
+resize();
+
+function randBetween(a, b) { return a + Math.random() * (b - a); }
+
+class Bubble {
+  constructor(x, y, r) {
+    this.x = x ?? randBetween(r, W - r);
+    this.y = y ?? randBetween(r, H - r);
+    this.r = r ?? randBetween(20, 110);
+    this.baseR = this.r;
+    this.vx = randBetween(-.25, .25);
+    this.vy = randBetween(-.18, -.05);
+    this.opacity = randBetween(.55, .85);
+    this.hue = randBetween(168, 188); // teal range
+    this.shimmerOffset = Math.random() * Math.PI * 2;
+    this.wobble = 0;
+    this.alive = true;
+    this.popping = false;
+    this.popProgress = 0;
+    // mouse repulsion
+    this.repulseVx = 0;
+    this.repulseVy = 0;
+  }
+
+  applyMouse(mx, my) {
+    const dx = this.x - mx, dy = this.y - my;
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const influence = this.r * 2.5;
+    if (dist < influence && dist > 0) {
+      const force = (1 - dist / influence) * 1.8;
+      this.repulseVx += (dx / dist) * force;
+      this.repulseVy += (dy / dist) * force;
+    }
+  }
+
+  update(t) {
+    if (this.popping) {
+      this.popProgress += .06;
+      if (this.popProgress >= 1) this.alive = false;
+      return;
+    }
+    this.x += this.vx + this.repulseVx;
+    this.y += this.vy + this.repulseVy;
+    this.repulseVx *= .88;
+    this.repulseVy *= .88;
+    this.wobble = Math.sin(t * .001 + this.shimmerOffset) * 2;
+    // wrap
+    if (this.x < -this.r * 2) this.x = W + this.r;
+    if (this.x > W + this.r * 2) this.x = -this.r;
+    if (this.y < -this.r * 2) this.y = H + this.r;
+    if (this.y > H + this.r * 2) this.y = -this.r;
+  }
+
+  draw(t) {
+    if (!this.alive) return;
+    const r = this.r + this.wobble;
+    const popScale = this.popping ? 1 + this.popProgress * .5 : 1;
+    const popAlpha = this.popping ? 1 - this.popProgress : 1;
+    ctx.save();
+    ctx.globalAlpha = this.opacity * popAlpha;
+    ctx.translate(this.x, this.y);
+    ctx.scale(popScale, popScale);
+
+    // outer glow
+    const glow = ctx.createRadialGradient(0, 0, r * .6, 0, 0, r * 1.05);
+    glow.addColorStop(0, `hsla(${this.hue},50%,80%,0)`);
+    glow.addColorStop(1, `hsla(${this.hue},60%,75%,.18)`);
+    ctx.beginPath();
+    ctx.arc(0, 0, r * 1.1, 0, Math.PI * 2);
+    ctx.fillStyle = glow;
+    ctx.fill();
+
+    // bubble fill
+    const fill = ctx.createRadialGradient(-r * .25, -r * .3, r * .05, 0, 0, r);
+    fill.addColorStop(0, `hsla(${this.hue - 5},60%,92%,.45)`);
+    fill.addColorStop(.5, `hsla(${this.hue},45%,80%,.22)`);
+    fill.addColorStop(1, `hsla(${this.hue + 8},55%,72%,.08)`);
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.fillStyle = fill;
+    ctx.fill();
+
+    // rim
+    ctx.beginPath();
+    ctx.arc(0, 0, r, 0, Math.PI * 2);
+    ctx.strokeStyle = `hsla(${this.hue},55%,85%,.5)`;
+    ctx.lineWidth = .8;
+    ctx.stroke();
+
+    // top highlight
+    const shine = ctx.createRadialGradient(-r * .3, -r * .35, 0, -r * .25, -r * .3, r * .45);
+    shine.addColorStop(0, `hsla(${this.hue - 10},80%,98%,.7)`);
+    shine.addColorStop(1, `hsla(${this.hue},70%,92%,0)`);
+    ctx.beginPath();
+    ctx.ellipse(-r * .3, -r * .35, r * .28, r * .18, -.4, 0, Math.PI * 2);
+    ctx.fillStyle = shine;
+    ctx.fill();
+
+    // small accent dot
+    ctx.beginPath();
+    ctx.arc(-r * .38, -r * .42, r * .06, 0, Math.PI * 2);
+    ctx.fillStyle = `hsla(${this.hue - 10},90%,99%,.9)`;
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  contains(px, py) {
+    return Math.hypot(this.x - px, this.y - py) < this.r;
+  }
+}
+
+// spawn bubbles
+function spawnBubbles(n = 18) {
+  for (let i = 0; i < n; i++) {
+    setTimeout(() => bubbles.push(new Bubble()), i * 80);
+  }
+}
+spawnBubbles();
+
+// maintain minimum count
+function maintainBubbles() {
+  bubbles = bubbles.filter(b => b.alive);
+  while (bubbles.length < 14) {
+    bubbles.push(new Bubble(randBetween(0, W), H + 80, randBetween(20, 110)));
+  }
+}
+
+// click to pop
+canvas.addEventListener('click', e => {
+  const rect = canvas.getBoundingClientRect();
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+  let popped = false;
+  // pop the smallest bubble under cursor first
+  const hits = bubbles.filter(b => !b.popping && b.contains(cx, cy));
+  if (hits.length) {
+    hits.sort((a, b) => a.r - b.r);
+    const b = hits[0];
+    b.popping = true;
+    popped = true;
+    score++;
+    document.getElementById('score-val').textContent = score;
+    // score bounce
+    const sv = document.getElementById('score-val');
+    sv.style.transform = 'scale(1.4)';
+    setTimeout(() => sv.style.transform = '', 200);
+    // pop ripple
+    spawnPopParticle(e.clientX, e.clientY, b.r, b.hue);
+    spawnPopText(e.clientX, e.clientY);
+  }
+});
+
+function spawnPopParticle(x, y, r, hue) {
+  const el = document.createElement('div');
+  el.className = 'pop-particle';
+  el.style.cssText = `left:${x - r}px;top:${y - r}px;width:${r*2}px;height:${r*2}px;
+    background:radial-gradient(circle, hsla(${hue},60%,85%,.6), transparent 70%);`;
+  document.body.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+
+function spawnPopText(x, y) {
+  const el = document.createElement('div');
+  el.className = 'pop-text';
+  el.textContent = POP_WORDS[Math.floor(Math.random() * POP_WORDS.length)];
+  el.style.cssText = `left:${x - 20}px;top:${y - 20}px;`;
+  document.body.appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+
+let lastMaintain = 0;
+function loop(t) {
+  ctx.clearRect(0, 0, W, H);
+  if (t - lastMaintain > 2000) { maintainBubbles(); lastMaintain = t; }
+  bubbles.forEach(b => {
+    if (!b.popping) b.applyMouse(mx - canvas.getBoundingClientRect().left, my - canvas.getBoundingClientRect().top);
+    b.update(t);
+    b.draw(t);
+  });
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// ── SKILL BAR OBSERVER ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) e.target.classList.add('visible');
+  });
+}, { threshold: .3 });
+document.querySelectorAll('.skill-row').forEach(r => observer.observe(r));
+</script>
+</body>
+</html>
