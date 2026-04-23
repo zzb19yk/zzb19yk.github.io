@@ -9,15 +9,14 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
-  --navy:    #0a0f1a;
-  --navy2:   #0f151f;
+  --black:   #000000;
+  --navy:    #0e1520;
+  --navy2:   #111d2e;
   --teal:    #7ecdc8;
   --ivory:   #fdfbf4;
-  --ivory2:  #f5f0e8;
-  --dark-nav:#080f1a;
   --text:    #1a1a1a;
   --mid:     #666;
-  --nav-h:   60px;
+  --nav-h:   70px;
 }
 
 html, body {
@@ -25,351 +24,112 @@ html, body {
   font-family:'DM Sans', sans-serif;
   overflow:hidden;
   cursor:none;
-  background: var(--navy);
+  background: var(--black); /* 기본 배경 블랙 */
 }
 
 /* ── CURSOR ── */
 #cursor {
-  position:fixed;
-  width:13px; height:13px;
-  border-radius:50%;
-  background: #fdf4dc;
-  pointer-events:none;
-  z-index:99999;
+  position:fixed; width:13px; height:13px; border-radius:50%;
+  background: #fdf4dc; pointer-events:none; z-index:99999;
   transform:translate(-50%,-50%);
-  transition:width .13s, height .13s, background .25s;
-  box-shadow:0 0 7px rgba(253,244,220,.55);
+  transition:width .15s, height .15s, background .25s;
+  box-shadow:0 0 10px rgba(253,244,220,0.6);
 }
-#cursor.big {
-  width:36px; height:36px;
-  background:rgba(253,244,220,.3);
-}
-body.light-cursor #cursor {
-  background: var(--teal);
-  box-shadow:0 0 7px rgba(126,205,200,.55);
-}
-body.light-cursor #cursor.big {
-  background:rgba(126,205,200,.28);
-}
+#cursor.big { width:40px; height:40px; background:rgba(253,244,220,0.2); }
+body.light-cursor #cursor { background: var(--teal); box-shadow:0 0 10px rgba(126,205,200,0.6); }
+body.light-cursor #cursor.big { background:rgba(126,205,200,0.25); }
 
 /* ── VIEWS ── */
-.view {
-  position:fixed; inset:0;
-  display:none; flex-direction:column;
-  opacity:0;
-  transition:opacity .42s ease;
-}
+.view { position:fixed; inset:0; display:none; flex-direction:column; opacity:0; transition:opacity .5s ease; }
 .view.active  { display:flex; }
 .view.visible { opacity:1; }
 
-/* ════════════════════════════
-   ENTRY
-════════════════════════════ */
-#view-entry {
-  background: var(--navy);
-  align-items:center; justify-content:center;
-  overflow:hidden;
-}
-.entry-glow {
-  position:absolute;
-  width:600px; height:400px; border-radius:50%;
-  background:radial-gradient(ellipse, rgba(126,205,200,.06) 0%, transparent 65%);
-  top:50%; left:50%; transform:translate(-50%,-58%);
-  pointer-events:none;
-}
-.entry-top-label {
-  font-family:'Cormorant Garamond', serif;
-  font-size:14px; letter-spacing:.32em; text-transform:uppercase;
-  color:rgba(126,205,200,.55);
-  margin-bottom:36px;
-  opacity:0; animation:eIn .7s .3s forwards;
-}
-.entry-title {
-  font-family:'Cormorant Garamond', serif;
-  font-size:clamp(32px,4.5vw,52px);
-  font-weight:300; color:rgba(255,255,255,.92);
-  text-align:center; margin-bottom:14px;
-  opacity:0; animation:eIn .7s .5s forwards;
-}
-.entry-sub {
-  font-size:16px; color:rgba(255,255,255,.52);
-  letter-spacing:.04em; margin-bottom:58px;
-  opacity:0; animation:eIn .7s .65s forwards;
-}
-.entry-choices {
-  display:flex; gap:18px;
-  opacity:0; animation:eIn .7s .85s forwards;
-}
+/* ① ENTRY (BLACK) */
+#view-entry { background: #000; align-items:center; justify-content:center; }
+.entry-title { font-family:'Cormorant Garamond', serif; font-size:clamp(32px,5vw,52px); color:#fff; margin-bottom:40px; font-weight:300; }
+.entry-choices { display:flex; gap:20px; }
 .entry-btn {
-  position:relative; width:208px; padding:28px 22px 26px;
-  border:1px solid rgba(126,205,200,.2); border-radius:8px;
-  background:rgba(126,205,200,.03);
-  cursor:none; text-align:left;
-  transition:border-color .25s, background .25s, transform .22s;
-  overflow:hidden;
+  width:220px; padding:30px; border:1px solid rgba(255,255,255,0.2); border-radius:12px;
+  background:rgba(255,255,255,0.03); color:#fff; cursor:none; transition:all .3s;
 }
-.entry-btn::after {
-  content:''; position:absolute; inset:0;
-  background:linear-gradient(135deg,rgba(126,205,200,.07),transparent);
-  opacity:0; transition:opacity .25s;
-}
-.entry-btn:hover { border-color:rgba(126,205,200,.52); transform:translateY(-4px); }
-.entry-btn:hover::after { opacity:1; }
-.eb-mode  { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); margin-bottom:9px; }
-.eb-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:rgba(255,255,255,.9); margin-bottom:12px; }
-.eb-desc  { font-size:14px; line-height:1.8; color:rgba(255,255,255,.52); }
-.eb-arrow { position:absolute; bottom:18px; right:18px; font-size:14px; color:rgba(126,205,200,.38); transition:transform .2s,color .2s; }
-.entry-btn:hover .eb-arrow { transform:translate(3px,-3px); color:var(--teal); }
-@keyframes eIn { to { opacity:1; } }
+.entry-btn:hover { border-color:var(--teal); transform:translateY(-5px); background:rgba(126,205,200,0.05); }
+.eb-title { font-family:'Cormorant Garamond', serif; font-size:28px; margin-bottom:10px; }
+.eb-desc { font-size:13px; color:rgba(255,255,255,0.5); line-height:1.6; }
 
-/* ════════════════════════════
-   NAVBAR
-════════════════════════════ */
+/* ② NAVBAR */
 #navbar {
-  position:fixed; top:0; left:0; right:0;
-  height:var(--nav-h);
-  display:none; align-items:center;
-  justify-content:space-between;
-  padding:0 40px;
-  z-index:500;
-  background:var(--dark-nav);
-  border-bottom:1px solid rgba(126,205,200,.09);
+  position:fixed; top:0; left:0; right:0; height:var(--nav-h);
+  display:none; align-items:center; justify-content:space-between; padding:0 50px;
+  z-index:1000; background:rgba(8, 15, 26, 0.95); border-bottom:1px solid rgba(126,205,200,0.1);
 }
 #navbar.show { display:flex; }
-.nav-logo {
-  font-family:'Cormorant Garamond',serif;
-  font-size:20px; font-weight:300; letter-spacing:.1em;
-  color:rgba(255,255,255,.82);
-  cursor:none; background:none; border:none;
-  transition:color .2s;
-}
-.nav-logo:hover { color:var(--teal); }
-.nav-links { display:flex; gap:28px; list-style:none; }
+.nav-logo { font-family:'Cormorant Garamond',serif; font-size:22px; color:#fff; border:none; background:none; cursor:none; }
+.nav-links { display:flex; gap:35px; list-style:none; }
 .nav-links button {
-  font-family:'DM Sans',sans-serif;
-  font-size:12px; letter-spacing:.07em;
-  color:rgba(255,255,255,.48);
-  background:none; border:none; cursor:none;
-  position:relative; padding:2px 0;
-  transition:color .2s;
+  font-size:13px; color:rgba(255,255,255,0.5); background:none; border:none; cursor:none;
+  padding:5px 0; transition:color .3s; position:relative;
 }
-.nav-links button::after {
-  content:''; position:absolute; bottom:-2px; left:0;
-  width:0; height:1px; background:var(--teal);
-  transition:width .22s;
-}
-.nav-links button:hover, .nav-links button.active { color:rgba(255,255,255,.9); }
-.nav-links button:hover::after, .nav-links button.active::after { width:100%; }
-#mode-badge {
-  font-size:12px; font-weight:500; letter-spacing:.06em;
-  padding:8px 18px;
-  border:1.5px solid var(--teal); border-radius:99px;
-  color:var(--teal); background:rgba(126,205,200,.1);
-  cursor:none; font-family:'DM Sans',sans-serif;
-  transition:background .2s, color .2s;
-}
-#mode-badge:hover { background:var(--teal); color:var(--navy); }
-
-/* ════════════════════════════
-   MAIN / BUBBLES
-════════════════════════════ */
-#view-main { background:var(--navy2); position: relative; }
-#bubble-canvas {
-  position:absolute; inset:0;
-  width:100%; height:100%; display:block;
+.nav-links button:hover, .nav-links button.active { color:#fff; }
+.nav-links button.active::after {
+  content:''; position:absolute; bottom:0; left:0; width:100%; height:1px; background:var(--teal);
 }
 
-/* guide card */
-.guide-card {
-  position:absolute;
-  top:50%; left:50%;
-  transform:translate(-50%, -50%);
-  background:rgba(126,205,200,.08);
-  border:1.5px solid rgba(126,205,200,.25);
-  border-radius:14px;
-  padding:32px 48px;
-  z-index:10;
-  text-align:center;
-  max-width:420px;
-  backdrop-filter:blur(6px);
+/* ③ MAIN (BUBBLES) */
+#view-main { background: var(--navy2); }
+#bubble-canvas { position:absolute; inset:0; width:100%; height:100%; }
+.main-prompt-card {
+  position:absolute; top:42%; left:50%; transform:translate(-50%, -50%);
+  background:rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.1);
+  padding:40px 60px; border-radius:20px; backdrop-filter:blur(10px);
+  text-align:center; pointer-events:none; z-index:10;
 }
-.guide-text {
-  font-size:clamp(16px, 2.2vw, 24px);
-  letter-spacing:.04em;
-  color:rgba(253,244,220,.85);
-  font-family:'Cormorant Garamond', serif;
-  font-weight:300;
-  line-height:1.6;
+.main-prompt-card h2 {
+  font-family:'Cormorant Garamond', serif; font-size:32px; color:#fff;
+  font-weight:300; margin-bottom:15px; letter-spacing:0.05em;
 }
+.main-prompt-card p { font-size:14px; color:rgba(255,255,255,0.4); letter-spacing:0.1em; }
 
-/* ════════════════════════════
-   CONTENT PAGES
-════════════════════════════ */
-.content-view {
-  background:var(--ivory);
-  overflow-y:auto;
-  padding-top:var(--nav-h);
-}
+/* ④ CONTENT PAGES (CENTERED) */
+.content-view { background:var(--ivory); overflow-y:auto; padding-top:var(--nav-h); }
 .page-inner {
-  min-height:calc(100vh - var(--nav-h));
-  max-width:900px;
-  margin:0 auto;
-  width:100%;
-  padding:64px 48px 180px;
+  max-width:800px; margin:0 auto; width:100%; padding:100px 40px 150px; /* 하단 공간 확보 */
   display:flex; flex-direction:column;
-  justify-content:center;
 }
-.section-label {
-  font-size:9px; letter-spacing:.22em; text-transform:uppercase;
-  color:var(--teal); margin-bottom:16px;
-}
-.section-title {
-  font-family:'Cormorant Garamond',serif;
-  font-size:clamp(38px,5.5vw,64px);
-  font-weight:300; line-height:1.08;
-  margin-bottom:28px; color:var(--text);
-}
-.section-body {
-  font-size:15px; line-height:1.9;
-  color:var(--mid); max-width:560px;
-}
+.section-title { font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:300; margin-bottom:40px; color:var(--text); }
 
-/* blind mask */
-.blind-mask {
-  background:rgba(20,20,20,.82);
-  color:transparent !important;
-  border-radius:3px;
-  user-select:none; padding:0 4px;
-}
-
-/* ── CAREER ── */
-.career-block { margin-top:44px; }
-.career-block + .career-block { margin-top:52px; }
+/* CAREER STYLES */
+.career-block { margin-top:60px; }
 .career-header {
-  margin-bottom:28px;
-  padding-bottom:18px;
-  border-bottom:1px solid rgba(126,205,200,.18);
+  margin-bottom:25px; padding-bottom:15px; border-bottom:1px solid rgba(0,0,0,0.1);
 }
-.career-meta {
-  font-size:11px; letter-spacing:.08em;
-  color:rgba(126,205,200,.7);
-  margin-bottom:8px;
-}
-.career-who {
-  font-family:'Cormorant Garamond',serif;
-  font-size:26px; font-weight:300;
-  color:var(--text); line-height:1.3;
-}
-.edu-section { margin-top:64px; }
-.edu-header {
-  font-size:9px; letter-spacing:.22em; text-transform:uppercase;
-  color:rgba(126,205,200,.65); margin-bottom:20px;
-  padding-bottom:10px;
-  border-bottom:1px solid rgba(126,205,200,.1);
-}
+.career-who { font-size:20px; font-weight:500; color:var(--text); display:flex; align-items:baseline; gap:12px; }
+.career-meta { font-size:14px; color:var(--teal); font-weight:400; }
 
-/* shared card grid */
-.card-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(200px,1fr));
-  gap:14px;
-}
+.card-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
 .card {
-  background:rgba(126,205,200,.05);
-  border:1px solid rgba(126,205,200,.18);
-  border-radius:10px;
-  padding:20px 20px 40px;
-  cursor:none; position:relative;
-  transition:transform .2s, box-shadow .2s, border-color .2s;
-  min-height:110px;
+  background:#fff; border:1px solid rgba(0,0,0,0.05); border-radius:15px;
+  padding:25px; cursor:none; position:relative; transition:all .3s;
+  min-height:160px; display:flex; flex-direction:column; justify-content:space-between;
 }
-.card:hover {
-  transform:translateY(-4px);
-  box-shadow:0 12px 28px rgba(126,205,200,.14);
-  border-color:rgba(126,205,200,.38);
-}
-.card-tag {
-  font-size:9px; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--teal); margin-bottom:8px;
-}
-.card-title {
-  font-family:'Cormorant Garamond',serif;
-  font-size:18px; color:var(--text);
-  margin-bottom:6px; line-height:1.3;
-  word-break:keep-all;
-  overflow-wrap:break-word;
-}
-.card-desc { font-size:12px; color:var(--mid); line-height:1.6; }
-.card-more {
-  position:absolute; bottom:14px; right:16px;
-  font-size:10px; letter-spacing:.06em;
-  color:rgba(126,205,200,.45);
-  white-space:nowrap;
-}
-.card:hover .card-more { color:var(--teal); }
+.card:hover { transform:translateY(-8px); box-shadow:0 15px 35px rgba(0,0,0,0.08); }
+.card-title { font-family:'Cormorant Garamond',serif; font-size:20px; margin-bottom:10px; line-height:1.3; }
+.card-more { font-size:11px; color:var(--teal); align-self:flex-end; }
 
-/* ── CONTACT ── */
-.contact-links { display:flex; flex-direction:column; gap:12px; margin-top:32px; }
-.contact-link {
-  display:inline-flex; align-items:center; gap:10px;
-  padding:14px 28px;
-  border:1.5px solid rgba(126,205,200,.32);
-  border-radius:99px;
-  font-size:13px; letter-spacing:.05em;
-  color:var(--text); background:none; cursor:none;
-  font-family:'DM Sans',sans-serif; width:fit-content;
-  transition:background .2s, border-color .2s, transform .2s, color .2s;
-}
-.contact-link:hover { background:var(--teal); border-color:var(--teal); color:#fff; transform:translateX(7px); }
+/* BLIND MASK */
+.blind-mask { background:#1a1a1a; color:transparent !important; border-radius:4px; padding:0 6px; user-select:none; }
 
 /* ── POPUP ── */
 #popup-overlay {
-  position:fixed; inset:0;
-  background:rgba(8,14,26,.78);
-  backdrop-filter:blur(7px);
-  z-index:2000;
-  display:none; align-items:center; justify-content:center;
-  padding:20px;
+  position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px);
+  z-index:2000; display:none; align-items:center; justify-content:center; padding:20px;
 }
 #popup-overlay.open { display:flex; }
-#popup-box {
-  background:var(--ivory);
-  border-radius:14px;
-  width:100%; max-width:520px; max-height:78vh;
-  overflow-y:auto; padding:40px; position:relative;
-  box-shadow:0 24px 60px rgba(0,0,0,.38);
-  animation:popIn .28s ease;
-}
-@keyframes popIn {
-  from { opacity:0; transform:scale(.93) translateY(14px); }
-  to   { opacity:1; transform:scale(1) translateY(0); }
-}
-#popup-close {
-  position:absolute; top:18px; right:18px;
-  width:32px; height:32px; border-radius:50%;
-  background:rgba(126,205,200,.1);
-  border:none; cursor:none; font-size:16px; color:var(--mid);
-  display:flex; align-items:center; justify-content:center;
-  transition:background .2s, color .2s;
-}
-#popup-close:hover { background:var(--teal); color:#fff; }
-#popup-tag   { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--teal); margin-bottom:12px; }
-#popup-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:18px; line-height:1.2; }
-#popup-body  { font-size:14px; line-height:1.9; color:var(--mid); white-space:pre-wrap; }
+#popup-box { background:#fff; border-radius:20px; width:100%; max-width:500px; padding:50px; position:relative; }
+#popup-close { position:absolute; top:25px; right:25px; border:none; background:none; font-size:24px; cursor:none; }
 
-.page-enter { animation:pgIn .34s ease forwards; }
-@keyframes pgIn {
-  from { opacity:0; transform:translateY(12px); }
-  to   { opacity:1; transform:translateY(0); }
-}
-
-@media (max-width:600px) {
-  #navbar { padding:0 18px; }
-  .nav-links { gap:14px; }
-  .page-inner { padding:44px 20px 140px; }
-  .entry-choices { flex-direction:column; }
-  #popup-box { padding:26px 20px; }
-  .guide-card { padding:24px 32px; }
+@media (max-width:768px) {
+  .card-grid { grid-template-columns:1fr; }
+  .main-prompt-card { width:80%; padding:30px; }
 }
 </style>
 </head>
@@ -377,9 +137,8 @@ body.light-cursor #cursor.big {
 
 <div id="cursor"></div>
 
-<!-- ══ NAVBAR ══ -->
 <nav id="navbar">
-  <button class="nav-logo" id="nav-logo-btn" onclick="goTo('main')">zzb19yk</button>
+  <button class="nav-logo" onclick="goTo('main')">zzb19yk</button>
   <ul class="nav-links">
     <li><button onclick="goTo('about')">소개</button></li>
     <li><button onclick="goTo('career')">커리어</button></li>
@@ -387,441 +146,254 @@ body.light-cursor #cursor.big {
     <li><button onclick="goTo('life')">개인적 삶</button></li>
     <li><button onclick="goTo('contact')">연락처</button></li>
   </ul>
-  <button id="mode-badge" onclick="resetEntry()">— / —</button>
+  <button id="mode-badge" style="color:var(--teal); background:none; border:1px solid var(--teal); padding:5px 15px; border-radius:20px; font-size:11px; cursor:none;" onclick="resetEntry()">MODE</button>
 </nav>
 
-<!-- ① ENTRY -->
-<div class="view" id="view-entry">
-  <div class="entry-glow"></div>
-  <p class="entry-top-label">Portfolio</p>
+<div class="view active visible" id="view-entry">
   <h1 class="entry-title">어떻게 보실 건가요?</h1>
-  <p class="entry-sub">공개 범위를 선택해주세요</p>
   <div class="entry-choices">
     <button class="entry-btn" onclick="selectMode('blind')">
-      <div class="eb-mode">Mode 01</div>
       <div class="eb-title">Blind</div>
-      <div class="eb-desc">이름, 학력, 연락처,<br>별명이 비공개됩니다.</div>
-      <span class="eb-arrow">↗</span>
+      <div class="eb-desc">개인정보를 보호한 채<br>이력을 검토합니다.</div>
     </button>
     <button class="entry-btn" onclick="selectMode('open')">
-      <div class="eb-mode">Mode 02</div>
       <div class="eb-title">Open</div>
-      <div class="eb-desc">이름, 학력, 연락처,<br>별명이 공개됩니다.</div>
-      <span class="eb-arrow">↗</span>
+      <div class="eb-desc">모든 정보를 공개하고<br>상세히 확인합니다.</div>
     </button>
   </div>
 </div>
 
-<!-- ② MAIN / BUBBLES -->
 <div class="view" id="view-main">
   <canvas id="bubble-canvas"></canvas>
-  <div class="guide-card">
-    <div class="guide-text">위 메뉴에서 포트폴리오를 탐색해보세요</div>
+  <div class="main-prompt-card">
+    <h2>EXPLORE PORTFOLIO</h2>
+    <p>상단 메뉴를 통해 저의 이야기를 확인해보세요</p>
   </div>
 </div>
 
-<!-- ③ 소개 -->
 <div class="view content-view" id="view-about">
   <div class="page-inner">
-    <div class="section-label">About</div>
-    <h2 class="section-title">저는 이런 사람입니다.</h2>
-    <p class="section-body">
-      배우는 것을 좋아하고,<br>
-      완결성을 높이는 것에 집중하는<br>
-      인사행정 팀원<br><br>
-      이름 &nbsp;·&nbsp; <span class="blind-field">홍길동</span><br>
-      별명 &nbsp;·&nbsp; <span class="blind-field">zzb19yk</span>
+    <h2 class="section-title">Hello.</h2>
+    <p style="font-size:18px; line-height:1.8; color:var(--mid);">
+      배우는 것을 즐기며, 일의 완결성을 높이는 것에 집요하게 집중하는 인사행정 전문가입니다. 
+      구조화된 시스템 안에서 효율을 찾는 것을 좋아합니다.
     </p>
+    <div style="margin-top:50px; border-top:1px solid #eee; padding-top:30px;">
+        <p>Name · <span class="blind-field">홍길동</span></p>
+        <p>Identity · <span class="blind-field">zzb19yk</span></p>
+    </div>
   </div>
 </div>
 
-<!-- ④ 커리어 -->
 <div class="view content-view" id="view-career">
   <div class="page-inner">
-    <div class="section-label">Career</div>
-    <h2 class="section-title">걸어온 길.</h2>
+    <h2 class="section-title">Career.</h2>
 
     <div class="career-block">
       <div class="career-header">
-        <div class="career-meta">2024.09 — 현재</div>
-        <div class="career-who">바텍이우홀딩스 · 담당 (정규직)</div>
+        <div class="career-who">
+          <span>바텍이우홀딩스 · 담당 (정규직)</span>
+          <span class="career-meta">2024.09 — Present</span>
+        </div>
       </div>
       <div class="card-grid">
-        <div class="card" onclick="openPopup('프로젝트명 A','Career','주요 업무나 프로젝트에 대한 자세한 설명을 여기에 작성해주세요.\n\n사용 기술, 역할, 성과 등을 구체적으로 서술하면 좋습니다.')">
-          <div class="card-tag">Project</div>
-          <div class="card-title">프로젝트명 A</div>
-          <div class="card-desc">한 줄 요약을 여기에 작성</div>
-          <span class="card-more">자세히 →</span>
+        <div class="card" onclick="openPopup('HR 시스템 운영 및 고도화','Career','7개 계열사의 성과평가 및 승진 시스템을 관리하며 데이터 정합성을 유지합니다.')">
+          <div class="card-title">HR 시스템 운영 및 고도화</div>
+          <span class="card-more">MORE →</span>
         </div>
-        <div class="card" onclick="openPopup('프로젝트명 B','Career','주요 업무나 프로젝트에 대한 자세한 설명을 여기에 작성해주세요.\n\n사용 기술, 역할, 성과 등을 구체적으로 서술하면 좋습니다.')">
-          <div class="card-tag">Project</div>
-          <div class="card-title">프로젝트명 B</div>
-          <div class="card-desc">한 줄 요약을 여기에 작성</div>
-          <span class="card-more">자세히 →</span>
+        <div class="card" onclick="openPopup('전자계약 시스템 도입','Career','Adobe Sign을 전사 도입하여 계약 프로세스를 디지털화하고 운영 매뉴얼을 구축했습니다.')">
+          <div class="card-title">전자계약 시스템 도입</div>
+          <span class="card-more">MORE →</span>
         </div>
       </div>
     </div>
 
     <div class="career-block">
-      <div class="career-header">
-        <div class="career-meta">2022.06 — 2022.12</div>
-        <div class="career-who">현대엔지비 · 매니저 (인턴)</div>
-      </div>
-      <div class="card-grid">
-        <div class="card" onclick="openPopup('프로젝트명 C','Career','자세한 설명을 작성해주세요.')">
-          <div class="card-tag">Project</div>
-          <div class="card-title">프로젝트명 C</div>
-          <div class="card-desc">한 줄 요약을 여기에 작성</div>
-          <span class="card-more">자세히 →</span>
+        <div class="career-header">
+          <div class="career-who">
+            <span>현대엔지비 · 매니저 (인턴)</span>
+            <span class="career-meta">2022.06 — 2022.12</span>
+          </div>
         </div>
-      </div>
+        <div class="card-grid">
+            <div class="card" onclick="openPopup('교육 운영 지원','Career','기술 교육 프로그램 운영 및 행정 지원을 담당했습니다.')">
+              <div class="card-title">기술 교육 운영 지원</div>
+              <span class="card-more">MORE →</span>
+            </div>
+        </div>
     </div>
 
-    <div class="career-block">
-      <div class="career-header">
-        <div class="career-meta">2022.02 — 2022.05</div>
-        <div class="career-who">에스원 · 사무보조 (계약직)</div>
-      </div>
-      <div class="card-grid">
-        <div class="card" onclick="openPopup('프로젝트명 D','Career','자세한 설명을 작성해주세요.')">
-          <div class="card-tag">Project</div>
-          <div class="card-title">프로젝트명 D</div>
-          <div class="card-desc">한 줄 요약을 여기에 작성</div>
-          <span class="card-more">자세히 →</span>
+    <div style="margin-top:100px;">
+        <h3 style="font-family:'Cormorant Garamond'; font-size:32px; margin-bottom:30px;">Education</h3>
+        <div class="career-who">
+            <span><span class="blind-field">서강대학교</span> · 종교학, 심리학, 경영학</span>
+            <span class="career-meta">2018.03 — 2024.02</span>
         </div>
-      </div>
+        <div class="card-grid" style="margin-top:20px;">
+            <div class="card" onclick="openPopup('중국문화학과 행정조교','Education','타 학과생임에도 불구하고 뛰어난 소통 능력을 바탕으로 학과 행정 및 행사 운영을 완수했습니다.')">
+                <div class="card-title" style="white-space: nowrap;">중국문화학과 행정조교</div>
+                <span class="card-more">MORE →</span>
+            </div>
+        </div>
     </div>
-
-    <!-- 학력 -->
-    <div class="edu-section">
-      <div class="edu-header">Education</div>
-      <div class="career-header">
-        <div class="career-meta">2018 — 2024</div>
-        <div class="career-who"><span class="blind-field">서강대학교</span> · 종교학, 심리학, 경영학</div>
-      </div>
-      <div class="card-grid">
-        <div class="card" onclick="openPopup('중국문화학과 행정조교','Education','2023.01 ~ 2023.06\n타 학과생이었지만 교수, 조교, 학생, 학부모와 소통하고,\n학과 행사 운영, 출결 등 맡은 일을 오류 없이 수행했습니다.')">
-          <div class="card-tag">Activity</div>
-          <div class="card-title">중국문화학과 행정조교</div>
-          <div class="card-desc">소통, 출결, 행사 운영</div>
-          <span class="card-more">자세히 →</span>
-        </div>
-        <div class="card" onclick="openPopup('인사관리학회 HEROs','Education','2020.09 ~ 2023.06 / 브랜딩팀 팀장\n\n인사 Case Study, 조별 프로젝트 및 발표, 학회 인스타그램 운영')">
-          <div class="card-tag">Activity</div>
-          <div class="card-title">인사관리학회 HEROs</div>
-          <div class="card-desc">브랜딩팀 팀장</div>
-          <span class="card-more">자세히 →</span>
-        </div>
-      </div>
-    </div>
-
   </div>
 </div>
 
-<!-- ⑤ 역량 -->
 <div class="view content-view" id="view-skills">
-  <div class="page-inner">
-    <div class="section-label">Skills</div>
-    <h2 class="section-title">할 수 있는 것들.</h2>
-    <div class="card-grid" style="margin-top:44px">
-      <div class="card" onclick="openPopup('스킬 1','Skills','이 스킬로 할 수 있는 것들을 구체적으로 작성해주세요.\n\n예: 어느 수준까지 가능한지, 어떤 프로젝트에 사용했는지 등.')">
-        <div class="card-tag">Skill</div>
-        <div class="card-title">스킬 1</div>
-        <div class="card-desc">한 줄 설명을 여기에 작성</div>
-        <span class="card-more">자세히 →</span>
-      </div>
-      <div class="card" onclick="openPopup('스킬 2','Skills','이 스킬로 할 수 있는 것들을 구체적으로 작성해주세요.')">
-        <div class="card-tag">Skill</div>
-        <div class="card-title">스킬 2</div>
-        <div class="card-desc">한 줄 설명을 여기에 작성</div>
-        <span class="card-more">자세히 →</span>
-      </div>
-      <div class="card" onclick="openPopup('스킬 3','Skills','이 스킬로 할 수 있는 것들을 구체적으로 작성해주세요.')">
-        <div class="card-tag">Skill</div>
-        <div class="card-title">스킬 3</div>
-        <div class="card-desc">한 줄 설명을 여기에 작성</div>
-        <span class="card-more">자세히 →</span>
-      </div>
-      <div class="card" onclick="openPopup('스킬 4','Skills','이 스킬로 할 수 있는 것들을 구체적으로 작성해주세요.')">
-        <div class="card-tag">Skill</div>
-        <div class="card-title">스킬 4</div>
-        <div class="card-desc">한 줄 설명을 여기에 작성</div>
-        <span class="card-more">자세히 →</span>
+    <div class="page-inner">
+      <h2 class="section-title">Skills.</h2>
+      <div class="card-grid">
+        <div class="card"><div class="card-title">인사시스템(e-HR) 운영</div></div>
+        <div class="card"><div class="card-title">데이터 분석 및 가공</div></div>
+        <div class="card"><div class="card-title">프로세스 설계 및 매뉴얼화</div></div>
+        <div class="card"><div class="card-title">외국어 소통 (English)</div></div>
       </div>
     </div>
-  </div>
 </div>
 
-<!-- ⑥ 개인적 삶 -->
 <div class="view content-view" id="view-life">
-  <div class="page-inner">
-    <div class="section-label">Life</div>
-    <h2 class="section-title">일 밖의 나.</h2>
-    <p class="section-body">취미, 관심사, 요즘 빠져있는 것들.</p>
-    <div class="card-grid" style="margin-top:44px">
-      <div class="card" onclick="openPopup('독서','Life','어떤 책들을 읽는지, 최근에 읽은 책이나 좋아하는 작가 등을 여기에 작성해주세요.')">
-        <div class="card-tag">Hobby</div>
-        <div class="card-title">📚 독서</div>
-        <div class="card-desc">한 줄 설명을 여기에 작성</div>
-        <span class="card-more">자세히 →</span>
-      </div>
-      <div class="card" onclick="openPopup('음악','Life','어떤 음악을 좋아하는지, 악기를 다룬다면 어떤 악기인지 등을 작성해주세요.')">
-        <div class="card-tag">Hobby</div>
-        <div class="card-title">🎵 음악</div>
-        <div class="card-desc">한 줄 설명을 여기에 작성</div>
-        <span class="card-more">자세히 →</span>
-      </div>
-      <div class="card" onclick="openPopup('여행','Life','여행 이야기, 좋아하는 여행지, 앞으로 가고 싶은 곳 등을 작성해주세요.')">
-        <div class="card-tag">Hobby</div>
-        <div class="card-title">✈️ 여행</div>
-        <div class="card-desc">한 줄 설명을 여기에 작성</div>
-        <span class="card-more">자세히 →</span>
-      </div>
-      <div class="card" onclick="openPopup('요리','Life','좋아하는 요리, 자주 만드는 음식, 맛집 이야기 등을 작성해주세요.')">
-        <div class="card-tag">Hobby</div>
-        <div class="card-title">🍳 요리</div>
-        <div class="card-desc">한 줄 설명을 여기에 작성</div>
-        <span class="card-more">자세히 →</span>
+    <div class="page-inner">
+      <h2 class="section-title">Life.</h2>
+      <div class="card-grid">
+        <div class="card"><div class="card-title">⚽️ Soccer & Club</div></div>
+        <div class="card"><div class="card-title">🎸 Bass Guitar</div></div>
+        <div class="card"><div class="card-title">🎮 Football Manager</div></div>
+        <div class="card"><div class="card-title">✈️ Travel & Walking</div></div>
       </div>
     </div>
-  </div>
 </div>
 
-<!-- ⑦ 연락처 -->
 <div class="view content-view" id="view-contact">
-  <div class="page-inner">
-    <div class="section-label">Contact</div>
-    <h2 class="section-title">함께 이야기해요.</h2>
-    <p class="section-body">새로운 기회나 협업에 대해 언제든 연락 주세요.</p>
-    <div class="contact-links">
-      <button class="contact-link" id="email-btn">
-        <span>✉</span>
-        <span class="blind-field" id="email-text">your@email.com</span>
-      </button>
-      <button class="contact-link" onclick="window.open('https://github.com/zzb19yk','_blank')">
-        <span>↗</span> GitHub
-      </button>
+    <div class="page-inner" style="align-items: center; text-align: center;">
+      <h2 class="section-title">Contact.</h2>
+      <p style="margin-bottom:40px; color:var(--mid);">새로운 도전에 대해 이야기하는 것을 언제든 환영합니다.</p>
+      <a href="mailto:your@email.com" class="blind-field" style="font-size:24px; color:var(--text); text-decoration:none; border-bottom:1px solid #000; padding-bottom:5px;">your@email.com</a>
     </div>
-  </div>
 </div>
 
-<!-- POPUP -->
-<div id="popup-overlay" onclick="handleOverlayClick(event)">
+<div id="popup-overlay" onclick="if(event.target===this)closePopup()">
   <div id="popup-box">
     <button id="popup-close" onclick="closePopup()">✕</button>
-    <div id="popup-tag"></div>
-    <div id="popup-title"></div>
-    <div id="popup-body"></div>
+    <h3 id="popup-title" style="font-family:'Cormorant Garamond'; font-size:28px; margin-bottom:20px;"></h3>
+    <p id="popup-body" style="line-height:1.8; color:var(--mid);"></p>
   </div>
 </div>
 
 <script>
-/* ── STATE ── */
 let _mode = null, _cur = 'entry';
 
-/* ── CURSOR ── */
+/* CURSOR */
 const curEl = document.getElementById('cursor');
-let mx = -300, my = -300;
 document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  curEl.style.left = mx + 'px';
-  curEl.style.top  = my + 'px';
+  curEl.style.left = e.clientX + 'px';
+  curEl.style.top = e.clientY + 'px';
 });
 document.addEventListener('mouseover', e => {
-  curEl.classList.toggle('big', !!e.target.closest('button,.card,a'));
+  curEl.classList.toggle('big', !!e.target.closest('button, .card, a'));
 });
 
-function setCursorLight(light) {
-  document.body.classList.toggle('light-cursor', light);
-}
-
-/* ── ROUTER ── */
-const LIGHT_VIEWS = new Set(['about','career','skills','life','contact']);
-
+/* ROUTER */
 function showView(id) {
-  document.querySelectorAll('.view').forEach(v => {
+  const views = document.querySelectorAll('.view');
+  views.forEach(v => {
     v.classList.remove('visible');
-    setTimeout(() => { if (!v.classList.contains('visible')) v.classList.remove('active'); }, 450);
+    setTimeout(() => { if(!v.classList.contains('visible')) v.classList.remove('active'); }, 500);
   });
-  const el = document.getElementById('view-' + id);
-  el.classList.add('active');
-  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+
+  const target = document.getElementById('view-' + id);
+  target.classList.add('active');
+  setTimeout(() => target.classList.add('visible'), 50);
+  
   _cur = id;
-
-  const isEntry = id === 'entry';
-  document.getElementById('navbar').classList.toggle('show', !isEntry);
-  setCursorLight(LIGHT_VIEWS.has(id));
-
-  const labels = { about:'소개', career:'커리어', skills:'역량', life:'개인적 삶', contact:'연락처' };
-  document.querySelectorAll('.nav-links button').forEach(b => {
-    b.classList.toggle('active', b.textContent.trim() === (labels[id] || ''));
+  document.getElementById('navbar').classList.toggle('show', id !== 'entry');
+  document.body.classList.toggle('light-cursor', ['about','career','skills','life','contact'].includes(id));
+  
+  document.querySelectorAll('.nav-links button').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${id}'`));
   });
-
-  if (LIGHT_VIEWS.has(id)) {
-    const inner = el.querySelector('.page-inner');
-    if (inner) { inner.classList.remove('page-enter'); void inner.offsetWidth; inner.classList.add('page-enter'); }
-  }
-  if (id === 'main') setTimeout(resizeCanvas, 30);
 }
-
 function goTo(id) { showView(id); }
+function resetEntry() { showView('entry'); }
 
-function resetEntry() {
-  _mode = null;
-  document.getElementById('navbar').classList.remove('show');
-  showView('entry');
-}
-
-/* ── MODE ── */
 function selectMode(mode) {
   _mode = mode;
-  document.querySelectorAll('.blind-field').forEach(el => {
-    el.classList.toggle('blind-mask', mode === 'blind');
-  });
-  document.getElementById('nav-logo-btn').textContent = mode === 'blind' ? 'Portfolio' : 'zzb19yk';
-  document.getElementById('email-btn').onclick = () => {
-    if (mode === 'open') location.href = 'mailto:your@email.com';
-  };
-  document.getElementById('mode-badge').textContent = mode === 'blind' ? '🔒 Blind' : '🔓 Open';
-
-  const entry = document.getElementById('view-entry');
-  entry.classList.remove('visible');
-  setTimeout(() => { entry.classList.remove('active'); showView('main'); }, 450);
+  document.querySelectorAll('.blind-field').forEach(el => el.classList.toggle('blind-mask', mode === 'blind'));
+  document.getElementById('mode-badge').textContent = mode.toUpperCase();
+  showView('main');
 }
 
-/* ── POPUP ── */
 function openPopup(title, tag, body) {
-  document.getElementById('popup-tag').textContent   = tag;
   document.getElementById('popup-title').textContent = title;
-  document.getElementById('popup-body').textContent  = body;
+  document.getElementById('popup-body').textContent = body;
   document.getElementById('popup-overlay').classList.add('open');
 }
-function closePopup() {
-  document.getElementById('popup-overlay').classList.remove('open');
-}
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById('popup-overlay')) closePopup();
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
+function closePopup() { document.getElementById('popup-overlay').classList.remove('open'); }
 
-/* ════════════════════════════
-   BUBBLES
-════════════════════════════ */
+/* BUBBLES */
 const canvas = document.getElementById('bubble-canvas');
-const ctx    = canvas.getContext('2d');
-let W = 0, H = 0, bubbles = [];
+const ctx = canvas.getContext('2d');
+let W, H, bubbles = [];
 
-function resizeCanvas() {
-  W = canvas.width  = canvas.offsetWidth  || window.innerWidth;
-  H = canvas.height = canvas.offsetHeight || window.innerHeight;
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
 }
-window.addEventListener('resize', resizeCanvas);
-
-function rnd(a, b) { return a + Math.random() * (b - a); }
+window.addEventListener('resize', resize);
+resize();
 
 class Bubble {
-  constructor(x, y, r) {
-    this.x = x !== undefined ? x : rnd(0, W);
-    this.y = y !== undefined ? y : rnd(0, H);
-    this.r = r !== undefined ? r : rnd(24, 96);
-    this.vx = rnd(-.12, .12);
-    this.vy = rnd(-.1, -.02);
-    this.opacity = rnd(.35, .55);
-    this.phase = Math.random() * Math.PI * 2;
-    this._w = 0;
-    this.rx = 0; this.ry = 0;
+  constructor() {
+    this.reset();
+    this.y = Math.random() * H;
   }
-
-  mouse(px, py) {
-    const dx = this.x - px, dy = this.y - py;
-    const d  = Math.hypot(dx, dy);
-    const zone = this.r * 2.8;
-    if (d < zone && d > 1) {
-      const f = (1 - d / zone) * 1.2;
-      this.rx += (dx / d) * f;
-      this.ry += (dy / d) * f;
-    }
+  reset() {
+    this.r = 10 + Math.random() * 50;
+    this.x = Math.random() * W;
+    this.y = H + this.r + Math.random() * 100;
+    this.vx = (Math.random() - 0.5) * 0.5;
+    this.vy = -0.3 - Math.random() * 0.8;
+    this.opacity = 0.1 + Math.random() * 0.3;
   }
-
-  update(t) {
-    this.x += this.vx + this.rx;
-    this.y += this.vy + this.ry;
-    this.rx *= .88; this.ry *= .88;
-    this._w = Math.sin(t * .0005 + this.phase) * 1.2;
-    const pad = this.r + 2;
-    if (this.x < -pad) this.x = W + pad;
-    if (this.x > W + pad) this.x = -pad;
-    if (this.y < -pad) this.y = H + pad;
-    if (this.y > H + pad) this.y = -pad;
-  }
-
-  draw() {
-    const r = Math.max(1, this.r + this._w);
-    ctx.save();
-    ctx.globalAlpha = this.opacity;
-    ctx.translate(this.x, this.y);
-
-    /* soft bubble gradient */
-    const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, r);
-    gradient.addColorStop(0,   'rgba(253, 244, 220, 0.45)');
-    gradient.addColorStop(0.7, 'rgba(253, 244, 220, 0.15)');
-    gradient.addColorStop(1,   'rgba(253, 244, 220, 0)');
+  update(mx, my) {
+    this.x += this.vx;
+    this.y += this.vy;
     
+    // Mouse interaction (Soft move)
+    const dx = mx - this.x;
+    const dy = my - this.y;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if(dist < 150) {
+        this.x -= dx * 0.02;
+        this.y -= dy * 0.02;
+    }
+
+    if (this.y < -this.r) this.reset();
+  }
+  draw() {
     ctx.beginPath();
-    ctx.arc(0, 0, r, 0, Math.PI * 2);
-    ctx.fillStyle = gradient;
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
     ctx.fill();
-
-    ctx.restore();
   }
 }
 
-/* dense initial fill */
-function spawnInitial() {
-  if (!W || !H) return;
-  const count = Math.max(32, Math.floor(W * H / 9500));
-  for (let i = 0; i < count; i++) {
-    setTimeout(() => bubbles.push(new Bubble()), i * 28);
-  }
-}
+// Create many bubbles for "tight" feeling
+for(let i=0; i<150; i++) bubbles.push(new Bubble());
 
-/* maintain density */
-function maintain() {
-  const target = Math.max(32, Math.floor(W * H / 9500));
-  while (bubbles.length < target) {
-    const edge = Math.floor(Math.random() * 4), r = rnd(24, 96);
-    let x, y;
-    if      (edge === 0) { x = rnd(0,W); y = H + r; }
-    else if (edge === 1) { x = -r;       y = rnd(0,H); }
-    else if (edge === 2) { x = W + r;    y = rnd(0,H); }
-    else                 { x = rnd(0,W); y = -r; }
-    bubbles.push(new Bubble(x, y, r));
-  }
-}
+let mx=0, my=0;
+window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
 
-let lastM = 0;
-function loop(t) {
-  if (_cur === 'main' && W > 0 && H > 0) {
-    ctx.clearRect(0, 0, W, H);
-    if (t - lastM > 1500) { maintain(); lastM = t; }
-    const rect = canvas.getBoundingClientRect();
-    const lx = mx - rect.left, ly = my - rect.top;
+function loop() {
+  ctx.clearRect(0, 0, W, H);
+  if(_cur === 'main') {
     bubbles.forEach(b => {
-      b.mouse(lx, ly);
-      b.update(t);
+      b.update(mx, my);
       b.draw();
     });
   }
   requestAnimationFrame(loop);
 }
-requestAnimationFrame(loop);
-
-/* ── INIT ── */
-window.addEventListener('load', () => {
-  resizeCanvas();
-  spawnInitial();
-});
-showView('entry');
+loop();
 </script>
 </body>
 </html>
