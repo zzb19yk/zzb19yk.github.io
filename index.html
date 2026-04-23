@@ -9,18 +9,15 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
-  --navy:    #111827;
-  --navy2:   #1a2438;
+  --navy:    #0e1520;
+  --navy2:   #111d2e;
   --teal:    #7ecdc8;
-  --teal2:   #a8deda;
-  --teal3:   #c8f0ed;
   --ivory:   #fdfbf4;
   --ivory2:  #f5f0e8;
-  --dark-nav:#0f1620;
+  --dark-nav:#080f1a;
   --text:    #1a1a1a;
   --mid:     #666;
-  --nav-h:   62px;
-  --cursor-c:#ff7043;
+  --nav-h:   60px;
 }
 
 html, body {
@@ -34,19 +31,26 @@ html, body {
 /* ── CURSOR ── */
 #cursor {
   position:fixed;
-  width:14px; height:14px;
+  width:13px; height:13px;
   border-radius:50%;
-  background: var(--cursor-c);
+  background: #fdf4dc;
   pointer-events:none;
   z-index:99999;
   transform:translate(-50%,-50%);
-  transition:width .14s, height .14s, background .14s;
-  box-shadow: 0 0 8px rgba(255,112,67,.6);
+  transition:width .13s, height .13s, background .25s;
+  box-shadow:0 0 7px rgba(253,244,220,.55);
 }
 #cursor.big {
-  width:38px; height:38px;
-  background:rgba(255,112,67,.3);
-  box-shadow:0 0 14px rgba(255,112,67,.4);
+  width:36px; height:36px;
+  background:rgba(253,244,220,.3);
+}
+/* teal cursor for light pages */
+body.light-cursor #cursor {
+  background: var(--teal);
+  box-shadow:0 0 7px rgba(126,205,200,.55);
+}
+body.light-cursor #cursor.big {
+  background:rgba(126,205,200,.28);
 }
 
 /* ── VIEWS ── */
@@ -54,14 +58,14 @@ html, body {
   position:fixed; inset:0;
   display:none; flex-direction:column;
   opacity:0;
-  transition:opacity .45s ease;
+  transition:opacity .42s ease;
 }
 .view.active  { display:flex; }
 .view.visible { opacity:1; }
 
-/* ════════════════════════════════
+/* ════════════════════════════
    ENTRY
-════════════════════════════════ */
+════════════════════════════ */
 #view-entry {
   background: var(--navy);
   align-items:center; justify-content:center;
@@ -69,68 +73,59 @@ html, body {
 }
 .entry-glow {
   position:absolute;
-  width:700px; height:500px;
-  border-radius:50%;
-  background:radial-gradient(ellipse, rgba(126,205,200,.07) 0%, transparent 65%);
-  top:50%; left:50%; transform:translate(-50%,-55%);
+  width:600px; height:400px; border-radius:50%;
+  background:radial-gradient(ellipse, rgba(126,205,200,.06) 0%, transparent 65%);
+  top:50%; left:50%; transform:translate(-50%,-58%);
   pointer-events:none;
 }
 .entry-top-label {
   font-family:'Cormorant Garamond', serif;
-  font-size:15px; letter-spacing:.3em;
-  text-transform:uppercase;
-  color:rgba(126,205,200,.6);
-  margin-bottom:40px;
+  font-size:14px; letter-spacing:.32em; text-transform:uppercase;
+  color:rgba(126,205,200,.55);
+  margin-bottom:36px;
   opacity:0; animation:eIn .7s .3s forwards;
 }
 .entry-title {
   font-family:'Cormorant Garamond', serif;
-  font-size:clamp(30px,4.5vw,50px);
-  font-weight:300;
-  color:rgba(255,255,255,.92);
-  text-align:center;
-  margin-bottom:14px;
+  font-size:clamp(32px,4.5vw,52px);
+  font-weight:300; color:rgba(255,255,255,.92);
+  text-align:center; margin-bottom:14px;
   opacity:0; animation:eIn .7s .5s forwards;
 }
 .entry-sub {
-  font-size:16px;
-  color:rgba(255,255,255,.55);
-  letter-spacing:.04em;
-  margin-bottom:60px;
+  font-size:16px; color:rgba(255,255,255,.52);
+  letter-spacing:.04em; margin-bottom:58px;
   opacity:0; animation:eIn .7s .65s forwards;
 }
 .entry-choices {
-  display:flex; gap:20px;
+  display:flex; gap:18px;
   opacity:0; animation:eIn .7s .85s forwards;
 }
 .entry-btn {
-  position:relative;
-  width:210px; padding:28px 22px 24px;
-  border:1px solid rgba(126,205,200,.22);
-  border-radius:8px;
+  position:relative; width:208px; padding:28px 22px 26px;
+  border:1px solid rgba(126,205,200,.2); border-radius:8px;
   background:rgba(126,205,200,.03);
   cursor:none; text-align:left;
   transition:border-color .25s, background .25s, transform .22s;
   overflow:hidden;
 }
 .entry-btn::after {
-  content:'';
-  position:absolute; inset:0;
-  background:linear-gradient(135deg, rgba(126,205,200,.08), transparent);
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(126,205,200,.07),transparent);
   opacity:0; transition:opacity .25s;
 }
-.entry-btn:hover { border-color:rgba(126,205,200,.55); transform:translateY(-4px); }
+.entry-btn:hover { border-color:rgba(126,205,200,.52); transform:translateY(-4px); }
 .entry-btn:hover::after { opacity:1; }
-.eb-mode { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); margin-bottom:8px; }
-.eb-title { font-family:'Cormorant Garamond', serif; font-size:32px; font-weight:300; color:rgba(255,255,255,.9); margin-bottom:12px; }
-.eb-desc { font-size:13px; line-height:1.8; color:rgba(255,255,255,.55); }
-.eb-arrow { position:absolute; bottom:18px; right:18px; font-size:14px; color:rgba(126,205,200,.4); transition:transform .2s, color .2s; }
+.eb-mode  { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); margin-bottom:9px; }
+.eb-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:rgba(255,255,255,.9); margin-bottom:12px; }
+.eb-desc  { font-size:14px; line-height:1.8; color:rgba(255,255,255,.52); }
+.eb-arrow { position:absolute; bottom:18px; right:18px; font-size:14px; color:rgba(126,205,200,.38); transition:transform .2s,color .2s; }
 .entry-btn:hover .eb-arrow { transform:translate(3px,-3px); color:var(--teal); }
 @keyframes eIn { to { opacity:1; } }
 
-/* ════════════════════════════════
+/* ════════════════════════════
    NAVBAR
-════════════════════════════════ */
+════════════════════════════ */
 #navbar {
   position:fixed; top:0; left:0; right:0;
   height:var(--nav-h);
@@ -138,69 +133,76 @@ html, body {
   justify-content:space-between;
   padding:0 40px;
   z-index:500;
-  background: var(--dark-nav);
-  border-bottom:1px solid rgba(126,205,200,.1);
+  background:var(--dark-nav);
+  border-bottom:1px solid rgba(126,205,200,.09);
 }
 #navbar.show { display:flex; }
 .nav-logo {
-  font-family:'Cormorant Garamond', serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:20px; font-weight:300; letter-spacing:.1em;
-  color:rgba(255,255,255,.85);
+  color:rgba(255,255,255,.82);
   cursor:none; background:none; border:none;
   transition:color .2s;
 }
 .nav-logo:hover { color:var(--teal); }
 .nav-links { display:flex; gap:28px; list-style:none; }
 .nav-links button {
-  font-family:'DM Sans', sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-size:12px; letter-spacing:.07em;
-  color:rgba(255,255,255,.5);
+  color:rgba(255,255,255,.48);
   background:none; border:none; cursor:none;
   position:relative; padding:2px 0;
   transition:color .2s;
 }
 .nav-links button::after {
-  content:''; position:absolute;
-  bottom:-2px; left:0;
-  width:0; height:1px;
-  background:var(--teal);
+  content:''; position:absolute; bottom:-2px; left:0;
+  width:0; height:1px; background:var(--teal);
   transition:width .22s;
 }
 .nav-links button:hover, .nav-links button.active { color:rgba(255,255,255,.9); }
 .nav-links button:hover::after, .nav-links button.active::after { width:100%; }
-
-/* mode badge */
 #mode-badge {
-  font-size:11px; letter-spacing:.08em;
-  padding:7px 16px;
-  border:1.5px solid var(--teal);
-  border-radius:99px;
-  color:var(--teal);
-  background:rgba(126,205,200,.08);
-  cursor:none; font-family:'DM Sans', sans-serif;
-  font-weight:500;
+  font-size:12px; font-weight:500; letter-spacing:.06em;
+  padding:8px 18px;
+  border:1.5px solid var(--teal); border-radius:99px;
+  color:var(--teal); background:rgba(126,205,200,.1);
+  cursor:none; font-family:'DM Sans',sans-serif;
   transition:background .2s, color .2s;
 }
 #mode-badge:hover { background:var(--teal); color:var(--navy); }
 
-/* ════════════════════════════════
+/* ════════════════════════════
    MAIN / BUBBLES
-════════════════════════════════ */
-#view-main { background: var(--navy2); }
+════════════════════════════ */
+#view-main { background:var(--navy2); }
 #bubble-canvas {
   position:absolute; inset:0;
   width:100%; height:100%; display:block;
 }
-.bubble-hint {
-  position:absolute; bottom:28px; left:36px;
-  font-size:11px; letter-spacing:.1em; text-transform:uppercase;
-  color:rgba(126,205,200,.4);
-  pointer-events:none; z-index:10;
+
+/* nav prompt card */
+.nav-prompt {
+  position:absolute;
+  bottom:36px; left:50%; transform:translateX(-50%);
+  z-index:20; pointer-events:none;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  text-align:center;
+}
+.nav-prompt-pages {
+  display:flex; gap:20px;
+  font-size:11px; letter-spacing:.12em;
+  color:rgba(253,244,220,.55);
+  text-transform:uppercase;
+}
+.nav-prompt-pages span { transition:color .2s; }
+.nav-prompt-arrow {
+  font-size:11px; letter-spacing:.08em;
+  color:rgba(253,244,220,.3);
 }
 
-/* ════════════════════════════════
+/* ════════════════════════════
    CONTENT PAGES
-════════════════════════════════ */
+════════════════════════════ */
 .content-view {
   background:var(--ivory);
   overflow-y:auto;
@@ -208,7 +210,10 @@ html, body {
 }
 .page-inner {
   min-height:calc(100vh - var(--nav-h));
-  padding:64px 72px 80px;
+  max-width:900px;
+  margin:0 auto;
+  width:100%;
+  padding:64px 48px 100px;
   display:flex; flex-direction:column;
   justify-content:center;
 }
@@ -217,52 +222,48 @@ html, body {
   color:var(--teal); margin-bottom:16px;
 }
 .section-title {
-  font-family:'Cormorant Garamond', serif;
-  font-size:clamp(38px,5.5vw,66px);
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(38px,5.5vw,64px);
   font-weight:300; line-height:1.08;
-  margin-bottom:28px; max-width:700px;
-  color:var(--text);
+  margin-bottom:28px; color:var(--text);
 }
 .section-body {
-  font-size:15px; line-height:1.88;
-  color:var(--mid); max-width:540px;
+  font-size:15px; line-height:1.9;
+  color:var(--mid); max-width:560px;
 }
 
 /* blind mask */
 .blind-mask {
-  background:rgba(20,20,20,.8);
+  background:rgba(20,20,20,.82);
   color:transparent !important;
   border-radius:3px;
   user-select:none; padding:0 4px;
 }
 
-/* ── CAREER PAGE ── */
-.career-block { margin-top:48px; }
-.career-block + .career-block { margin-top:56px; }
+/* ── CAREER ── */
+.career-block { margin-top:44px; }
+.career-block + .career-block { margin-top:52px; }
 .career-header {
-  display:flex; align-items:baseline;
-  gap:16px; margin-bottom:20px;
+  margin-bottom:18px;
   padding-bottom:14px;
-  border-bottom:1px solid rgba(126,205,200,.2);
+  border-bottom:1px solid rgba(126,205,200,.18);
 }
-.career-years {
-  font-size:11px; letter-spacing:.09em;
-  color:var(--teal); white-space:nowrap;
+.career-meta {
+  font-size:11px; letter-spacing:.08em;
+  color:rgba(126,205,200,.8);
+  margin-bottom:5px;
 }
-.career-role {
-  font-family:'Cormorant Garamond', serif;
-  font-size:22px; font-weight:300; color:var(--text);
+.career-who {
+  font-family:'Cormorant Garamond',serif;
+  font-size:24px; font-weight:300;
+  color:var(--text); line-height:1.2;
 }
-.career-company {
-  font-size:13px; color:var(--mid); margin-left:auto;
-}
-
-.edu-section { margin-top:60px; }
+.edu-section { margin-top:64px; }
 .edu-header {
-  font-size:9px; letter-spacing:.2em; text-transform:uppercase;
-  color:rgba(126,205,200,.7); margin-bottom:16px;
+  font-size:9px; letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(126,205,200,.65); margin-bottom:20px;
   padding-bottom:10px;
-  border-bottom:1px solid rgba(126,205,200,.12);
+  border-bottom:1px solid rgba(126,205,200,.1);
 }
 
 /* shared card grid */
@@ -272,35 +273,36 @@ html, body {
   gap:14px;
 }
 .card {
-  background:rgba(126,205,200,.06);
-  border:1px solid rgba(126,205,200,.2);
-  border-radius:10px; padding:20px;
-  cursor:none;
+  background:rgba(126,205,200,.05);
+  border:1px solid rgba(126,205,200,.18);
+  border-radius:10px;
+  padding:20px 20px 40px;   /* bottom padding for 자세히 */
+  cursor:none; position:relative;
   transition:transform .2s, box-shadow .2s, border-color .2s;
-  position:relative;
+  min-height:110px;
 }
 .card:hover {
   transform:translateY(-4px);
-  box-shadow:0 12px 28px rgba(126,205,200,.15);
-  border-color:rgba(126,205,200,.4);
+  box-shadow:0 12px 28px rgba(126,205,200,.14);
+  border-color:rgba(126,205,200,.38);
 }
 .card-tag {
   font-size:9px; letter-spacing:.1em; text-transform:uppercase;
   color:var(--teal); margin-bottom:8px;
 }
 .card-title {
-  font-family:'Cormorant Garamond', serif;
+  font-family:'Cormorant Garamond',serif;
   font-size:18px; color:var(--text);
   margin-bottom:6px; line-height:1.3;
+  word-break:keep-all;
+  overflow-wrap:break-word;
 }
-.card-desc {
-  font-size:12px; color:var(--mid);
-  line-height:1.62;
-}
+.card-desc { font-size:12px; color:var(--mid); line-height:1.6; }
 .card-more {
   position:absolute; bottom:14px; right:16px;
   font-size:10px; letter-spacing:.06em;
-  color:rgba(126,205,200,.5);
+  color:rgba(126,205,200,.45);
+  white-space:nowrap;
 }
 .card:hover .card-more { color:var(--teal); }
 
@@ -309,92 +311,62 @@ html, body {
 .contact-link {
   display:inline-flex; align-items:center; gap:10px;
   padding:14px 28px;
-  border:1.5px solid rgba(126,205,200,.35);
+  border:1.5px solid rgba(126,205,200,.32);
   border-radius:99px;
   font-size:13px; letter-spacing:.05em;
-  color:var(--text); background:none;
-  cursor:none; font-family:'DM Sans', sans-serif;
-  width:fit-content;
+  color:var(--text); background:none; cursor:none;
+  font-family:'DM Sans',sans-serif; width:fit-content;
   transition:background .2s, border-color .2s, transform .2s, color .2s;
 }
-.contact-link:hover {
-  background:var(--teal); border-color:var(--teal);
-  color:#fff; transform:translateX(7px);
-}
+.contact-link:hover { background:var(--teal); border-color:var(--teal); color:#fff; transform:translateX(7px); }
 
-/* ── LIFE GRID ── */
-.life-grid {
-  display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(160px,1fr));
-  gap:14px; margin-top:44px;
-}
-
-/* ════════════════════════════════
-   POPUP / MODAL
-════════════════════════════════ */
+/* ── POPUP ── */
 #popup-overlay {
   position:fixed; inset:0;
-  background:rgba(10,14,20,.75);
-  backdrop-filter:blur(6px);
+  background:rgba(8,14,26,.78);
+  backdrop-filter:blur(7px);
   z-index:2000;
-  display:none;
-  align-items:center; justify-content:center;
+  display:none; align-items:center; justify-content:center;
   padding:20px;
 }
 #popup-overlay.open { display:flex; }
 #popup-box {
   background:var(--ivory);
   border-radius:14px;
-  width:100%; max-width:540px;
-  max-height:80vh;
-  overflow-y:auto;
-  padding:40px;
-  position:relative;
-  box-shadow:0 24px 64px rgba(0,0,0,.35);
-  animation:popIn .3s ease;
+  width:100%; max-width:520px; max-height:78vh;
+  overflow-y:auto; padding:40px; position:relative;
+  box-shadow:0 24px 60px rgba(0,0,0,.38);
+  animation:popIn .28s ease;
 }
 @keyframes popIn {
-  from { opacity:0; transform:scale(.94) translateY(12px); }
+  from { opacity:0; transform:scale(.93) translateY(14px); }
   to   { opacity:1; transform:scale(1) translateY(0); }
 }
 #popup-close {
   position:absolute; top:18px; right:18px;
-  width:32px; height:32px;
-  border-radius:50%;
-  background:rgba(126,205,200,.12);
-  border:none; cursor:none;
-  font-size:16px; color:var(--mid);
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(126,205,200,.1);
+  border:none; cursor:none; font-size:16px; color:var(--mid);
   display:flex; align-items:center; justify-content:center;
   transition:background .2s, color .2s;
 }
 #popup-close:hover { background:var(--teal); color:#fff; }
-#popup-tag {
-  font-size:9px; letter-spacing:.2em; text-transform:uppercase;
-  color:var(--teal); margin-bottom:12px;
-}
-#popup-title {
-  font-family:'Cormorant Garamond', serif;
-  font-size:28px; font-weight:300;
-  color:var(--text); margin-bottom:18px; line-height:1.2;
-}
-#popup-body {
-  font-size:14px; line-height:1.88;
-  color:var(--mid); white-space:pre-wrap;
-}
+#popup-tag   { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--teal); margin-bottom:12px; }
+#popup-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:18px; line-height:1.2; }
+#popup-body  { font-size:14px; line-height:1.9; color:var(--mid); white-space:pre-wrap; }
 
-/* page enter */
-.page-enter { animation:pgIn .36s ease forwards; }
+.page-enter { animation:pgIn .34s ease forwards; }
 @keyframes pgIn {
   from { opacity:0; transform:translateY(12px); }
   to   { opacity:1; transform:translateY(0); }
 }
 
 @media (max-width:600px) {
-  #navbar { padding:0 20px; }
+  #navbar { padding:0 18px; }
   .nav-links { gap:14px; }
-  .page-inner { padding:44px 20px 60px; }
+  .page-inner { padding:44px 20px 80px; }
   .entry-choices { flex-direction:column; }
-  #popup-box { padding:28px 22px; }
+  #popup-box { padding:26px 20px; }
 }
 </style>
 </head>
@@ -415,7 +387,7 @@ html, body {
   <button id="mode-badge" onclick="resetEntry()">— / —</button>
 </nav>
 
-<!-- ════ ① ENTRY ════ -->
+<!-- ① ENTRY -->
 <div class="view" id="view-entry">
   <div class="entry-glow"></div>
   <p class="entry-top-label">Portfolio</p>
@@ -437,13 +409,19 @@ html, body {
   </div>
 </div>
 
-<!-- ════ ② MAIN / BUBBLES ════ -->
+<!-- ② MAIN / BUBBLES -->
 <div class="view" id="view-main">
   <canvas id="bubble-canvas"></canvas>
-  <div class="bubble-hint">마우스로 버블을 밀어보세요</div>
+  <div class="nav-prompt">
+    <div class="nav-prompt-pages">
+      <span>소개</span><span>·</span><span>커리어</span><span>·</span>
+      <span>역량</span><span>·</span><span>개인적 삶</span><span>·</span><span>연락처</span>
+    </div>
+    <div class="nav-prompt-arrow">↑ 위 메뉴에서 포트폴리오를 탐색해보세요</div>
+  </div>
 </div>
 
-<!-- ════ ③ 소개 ════ -->
+<!-- ③ 소개 -->
 <div class="view content-view" id="view-about">
   <div class="page-inner">
     <div class="section-label">About</div>
@@ -458,18 +436,16 @@ html, body {
   </div>
 </div>
 
-<!-- ════ ④ 커리어 ════ -->
+<!-- ④ 커리어 -->
 <div class="view content-view" id="view-career">
   <div class="page-inner">
     <div class="section-label">Career</div>
     <h2 class="section-title">걸어온 길.</h2>
 
-    <!-- 직장 경력 -->
     <div class="career-block">
       <div class="career-header">
-        <span class="career-years">2024.09 — 현재</span>
-        <span class="career-role">담당 (정규직)</span>
-        <span class="career-company">바텍이우홀딩스</span>
+        <div class="career-meta">2024.09 — 현재</div>
+        <div class="career-who">바텍이우홀딩스 · 담당 (정규직)</div>
       </div>
       <div class="card-grid">
         <div class="card" onclick="openPopup('프로젝트명 A','Career','주요 업무나 프로젝트에 대한 자세한 설명을 여기에 작성해주세요.\n\n사용 기술, 역할, 성과 등을 구체적으로 서술하면 좋습니다.')">
@@ -489,9 +465,8 @@ html, body {
 
     <div class="career-block">
       <div class="career-header">
-        <span class="career-years">2022.06 — 2022.12</span>
-        <span class="career-role">매니저 (인턴)</span>
-        <span class="career-company">현대엔지비</span>
+        <div class="career-meta">2022.06 — 2022.12</div>
+        <div class="career-who">현대엔지비 · 매니저 (인턴)</div>
       </div>
       <div class="card-grid">
         <div class="card" onclick="openPopup('프로젝트명 C','Career','자세한 설명을 작성해주세요.')">
@@ -503,39 +478,36 @@ html, body {
       </div>
     </div>
 
- <div class="career-block">
+    <div class="career-block">
       <div class="career-header">
-        <span class="career-years">2022.02 — 2022.05</span>
-        <span class="career-role">사무보조 (계약직)</span>
-        <span class="career-company">에스원</span>
+        <div class="career-meta">2022.02 — 2022.05</div>
+        <div class="career-who">에스원 · 사무보조 (계약직)</div>
       </div>
       <div class="card-grid">
-        <div class="card" onclick="openPopup('프로젝트명 C','Career','자세한 설명을 작성해주세요.')">
+        <div class="card" onclick="openPopup('프로젝트명 D','Career','자세한 설명을 작성해주세요.')">
           <div class="card-tag">Project</div>
-          <div class="card-title">프로젝트명 C</div>
+          <div class="card-title">프로젝트명 D</div>
           <div class="card-desc">한 줄 요약을 여기에 작성</div>
           <span class="card-more">자세히 →</span>
         </div>
       </div>
     </div>
-    
-    <!-- 학력 (분리된 구역) -->
+
+    <!-- 학력 -->
     <div class="edu-section">
       <div class="edu-header">Education</div>
       <div class="career-header">
-        <span class="career-years">2018 — 2024</span>
-        <span class="career-role"><span class="blind-field">서강대학교</span></span>
-        <span class="career-company">종교학, 심리학, 경영학</span>
+        <div class="career-meta">2018 — 2024</div>
+        <div class="career-who"><span class="blind-field">서강대학교</span> · 종교학, 심리학, 경영학</div>
       </div>
       <div class="card-grid">
-        <div class="card" onclick="openPopup('중국문화학과 행정조교','Education','2023.01~2023.06\n타 학과생이었지만 교수, 조교, 학생, 학부모와 소통하고,\n학과 행사 운영, 출결 등 맡은 일을 오류 없이 수행했습니다')">
+        <div class="card" onclick="openPopup('중국문화학과 행정조교','Education','2023.01 ~ 2023.06\n타 학과생이었지만 교수, 조교, 학생, 학부모와 소통하고,\n학과 행사 운영, 출결 등 맡은 일을 오류 없이 수행했습니다.')">
           <div class="card-tag">Activity</div>
           <div class="card-title">중국문화학과 행정조교</div>
           <div class="card-desc">소통, 출결, 행사 운영</div>
           <span class="card-more">자세히 →</span>
-      </div>
-      <div class="card-grid">
-        <div class="card" onclick="openPopup('인사관리학회 HEROs','Education','2020.09~2023.06 / 브랜딩팀 팀장\n\n인사 Case Study, 조별 프로젝트 및 발표, 학회 인스타그램 운영')">
+        </div>
+        <div class="card" onclick="openPopup('인사관리학회 HEROs','Education','2020.09 ~ 2023.06 / 브랜딩팀 팀장\n\n인사 Case Study, 조별 프로젝트 및 발표, 학회 인스타그램 운영')">
           <div class="card-tag">Activity</div>
           <div class="card-title">인사관리학회 HEROs</div>
           <div class="card-desc">브랜딩팀 팀장</div>
@@ -547,7 +519,7 @@ html, body {
   </div>
 </div>
 
-<!-- ════ ⑤ 역량 ════ -->
+<!-- ⑤ 역량 -->
 <div class="view content-view" id="view-skills">
   <div class="page-inner">
     <div class="section-label">Skills</div>
@@ -581,13 +553,13 @@ html, body {
   </div>
 </div>
 
-<!-- ════ ⑥ 개인적 삶 ════ -->
+<!-- ⑥ 개인적 삶 -->
 <div class="view content-view" id="view-life">
   <div class="page-inner">
     <div class="section-label">Life</div>
     <h2 class="section-title">일 밖의 나.</h2>
     <p class="section-body">취미, 관심사, 요즘 빠져있는 것들.</p>
-    <div class="life-grid">
+    <div class="card-grid" style="margin-top:44px">
       <div class="card" onclick="openPopup('독서','Life','어떤 책들을 읽는지, 최근에 읽은 책이나 좋아하는 작가 등을 여기에 작성해주세요.')">
         <div class="card-tag">Hobby</div>
         <div class="card-title">📚 독서</div>
@@ -616,7 +588,7 @@ html, body {
   </div>
 </div>
 
-<!-- ════ ⑦ 연락처 ════ -->
+<!-- ⑦ 연락처 -->
 <div class="view content-view" id="view-contact">
   <div class="page-inner">
     <div class="section-label">Contact</div>
@@ -634,7 +606,7 @@ html, body {
   </div>
 </div>
 
-<!-- ════ POPUP ════ -->
+<!-- POPUP -->
 <div id="popup-overlay" onclick="handleOverlayClick(event)">
   <div id="popup-box">
     <button id="popup-close" onclick="closePopup()">✕</button>
@@ -645,11 +617,10 @@ html, body {
 </div>
 
 <script>
-// ── STATE ──
-let _mode = null;
-let _cur  = 'entry';
+/* ── STATE ── */
+let _mode = null, _cur = 'entry';
 
-// ── CURSOR ──
+/* ── CURSOR ── */
 const curEl = document.getElementById('cursor');
 let mx = -300, my = -300;
 document.addEventListener('mousemove', e => {
@@ -661,11 +632,17 @@ document.addEventListener('mouseover', e => {
   curEl.classList.toggle('big', !!e.target.closest('button,.card,a'));
 });
 
-// ── ROUTER ──
+function setCursorLight(light) {
+  document.body.classList.toggle('light-cursor', light);
+}
+
+/* ── ROUTER ── */
+const LIGHT_VIEWS = new Set(['about','career','skills','life','contact']);
+
 function showView(id) {
   document.querySelectorAll('.view').forEach(v => {
     v.classList.remove('visible');
-    setTimeout(() => { if (!v.classList.contains('visible')) v.classList.remove('active'); }, 460);
+    setTimeout(() => { if (!v.classList.contains('visible')) v.classList.remove('active'); }, 450);
   });
   const el = document.getElementById('view-' + id);
   el.classList.add('active');
@@ -674,13 +651,14 @@ function showView(id) {
 
   const isEntry = id === 'entry';
   document.getElementById('navbar').classList.toggle('show', !isEntry);
+  setCursorLight(LIGHT_VIEWS.has(id));
 
   const labels = { about:'소개', career:'커리어', skills:'역량', life:'개인적 삶', contact:'연락처' };
   document.querySelectorAll('.nav-links button').forEach(b => {
     b.classList.toggle('active', b.textContent.trim() === (labels[id] || ''));
   });
 
-  if (!isEntry && id !== 'main') {
+  if (LIGHT_VIEWS.has(id)) {
     const inner = el.querySelector('.page-inner');
     if (inner) { inner.classList.remove('page-enter'); void inner.offsetWidth; inner.classList.add('page-enter'); }
   }
@@ -695,33 +673,24 @@ function resetEntry() {
   showView('entry');
 }
 
-// ── MODE ──
+/* ── MODE ── */
 function selectMode(mode) {
   _mode = mode;
-
-  // blind-field toggle
   document.querySelectorAll('.blind-field').forEach(el => {
     el.classList.toggle('blind-mask', mode === 'blind');
   });
-
-  // nav logo
   document.getElementById('nav-logo-btn').textContent = mode === 'blind' ? 'Portfolio' : 'zzb19yk';
-
-  // email button
   document.getElementById('email-btn').onclick = () => {
     if (mode === 'open') location.href = 'mailto:your@email.com';
   };
-
-  // badge
   document.getElementById('mode-badge').textContent = mode === 'blind' ? '🔒 Blind' : '🔓 Open';
 
-  // transition out entry
   const entry = document.getElementById('view-entry');
   entry.classList.remove('visible');
-  setTimeout(() => { entry.classList.remove('active'); showView('main'); }, 460);
+  setTimeout(() => { entry.classList.remove('active'); showView('main'); }, 450);
 }
 
-// ── POPUP ──
+/* ── POPUP ── */
 function openPopup(title, tag, body) {
   document.getElementById('popup-tag').textContent   = tag;
   document.getElementById('popup-title').textContent = title;
@@ -736,9 +705,9 @@ function handleOverlayClick(e) {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
-// ════════════════════════════════
-// BUBBLES
-// ════════════════════════════════
+/* ════════════════════════════
+   BUBBLES
+════════════════════════════ */
 const canvas = document.getElementById('bubble-canvas');
 const ctx    = canvas.getContext('2d');
 let W = 0, H = 0, bubbles = [];
@@ -747,22 +716,20 @@ function resizeCanvas() {
   W = canvas.width  = canvas.offsetWidth  || window.innerWidth;
   H = canvas.height = canvas.offsetHeight || window.innerHeight;
 }
-window.addEventListener('resize', () => { resizeCanvas(); });
+window.addEventListener('resize', resizeCanvas);
 
 function rnd(a, b) { return a + Math.random() * (b - a); }
 
-// palette: navy bg + teal/mint bubbles
-const HUES = [178, 182, 186, 170, 174, 190];
-
 class Bubble {
   constructor(x, y, r) {
-    this.x = (x !== undefined) ? x : rnd(0, W);
-    this.y = (y !== undefined) ? y : rnd(0, H);
-    this.r = (r !== undefined) ? r : rnd(22, 95);
-    this.vx = rnd(-.28, .28);
-    this.vy = rnd(-.22, -.05);
-    this.hue = HUES[Math.floor(Math.random() * HUES.length)];
-    this.opacity = rnd(.55, .9);
+    this.x = x !== undefined ? x : rnd(0, W);
+    this.y = y !== undefined ? y : rnd(0, H);
+    this.r = r !== undefined ? r : rnd(14, 72);
+    this.vx = rnd(-.24, .24);
+    this.vy = rnd(-.2, -.04);
+    /* slight warm-white tint varies per bubble */
+    this.warmth = rnd(0, 18);   /* extra yellow in the white */
+    this.opacity = rnd(.52, .82);
     this.phase = Math.random() * Math.PI * 2;
     this._w = 0;
     this.rx = 0; this.ry = 0;
@@ -770,10 +737,10 @@ class Bubble {
 
   mouse(px, py) {
     const dx = this.x - px, dy = this.y - py;
-    const d = Math.hypot(dx, dy);
-    const zone = this.r * 3.2;
+    const d  = Math.hypot(dx, dy);
+    const zone = this.r * 3.5;
     if (d < zone && d > 1) {
-      const f = (1 - d / zone) * 2.2;
+      const f = (1 - d / zone) * 2.4;
       this.rx += (dx / d) * f;
       this.ry += (dy / d) * f;
     }
@@ -782,86 +749,74 @@ class Bubble {
   update(t) {
     this.x += this.vx + this.rx;
     this.y += this.vy + this.ry;
-    this.rx *= .84; this.ry *= .84;
-    this._w = Math.sin(t * .0008 + this.phase) * 2.2;
-
-    // wrap — come back from opposite side
-    const pad = this.r * 1.4;
-    if (this.x < -pad) this.x = W + this.r;
-    if (this.x > W + pad) this.x = -this.r;
-    if (this.y < -pad) this.y = H + this.r;
-    if (this.y > H + pad) this.y = -this.r;
+    this.rx *= .83; this.ry *= .83;
+    this._w = Math.sin(t * .0007 + this.phase) * 2;
+    /* wrap to opposite edge — no bubble ever disappears */
+    const pad = this.r + 2;
+    if (this.x < -pad) this.x = W + pad;
+    if (this.x > W + pad) this.x = -pad;
+    if (this.y < -pad) this.y = H + pad;
+    if (this.y > H + pad) this.y = -pad;
   }
 
   draw() {
-    const r = this.r + this._w;
+    const r = Math.max(1, this.r + this._w);
+    const w = this.warmth;
     ctx.save();
     ctx.globalAlpha = this.opacity;
     ctx.translate(this.x, this.y);
 
-    // outer soft glow
-    const glow = ctx.createRadialGradient(0, 0, r * .4, 0, 0, r * 1.5);
-    glow.addColorStop(0, `hsla(${this.hue},70%,72%,0)`);
-    glow.addColorStop(1, `hsla(${this.hue},65%,68%,.12)`);
-    ctx.beginPath(); ctx.arc(0, 0, r * 1.5, 0, Math.PI * 2);
-    ctx.fillStyle = glow; ctx.fill();
-
-    // body — more opaque on navy
-    const body = ctx.createRadialGradient(-r*.22,-r*.28,r*.03, 0,0,r);
-    body.addColorStop(0, `hsla(${this.hue-3},65%,88%,.72)`);
-    body.addColorStop(.45, `hsla(${this.hue},60%,72%,.52)`);
-    body.addColorStop(1, `hsla(${this.hue+6},55%,58%,.28)`);
-    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2);
+    /* ── body: nearly transparent in center, ivory-white rim glow ── */
+    const body = ctx.createRadialGradient(-r*.18,-r*.22,0, 0,0,r);
+    body.addColorStop(0,   `rgba(255,252,${240-w},.14)`);
+    body.addColorStop(.65, `rgba(255,252,${240-w},.06)`);
+    body.addColorStop(1,   `rgba(220,245,243,.15)`);
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2);
     ctx.fillStyle = body; ctx.fill();
 
-    // rim
-    ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2);
-    const rim = ctx.createLinearGradient(-r,-r,r,r);
-    rim.addColorStop(0, `hsla(${this.hue-5},80%,90%,.7)`);
-    rim.addColorStop(1, `hsla(${this.hue+8},60%,60%,.3)`);
-    ctx.strokeStyle = rim;
-    ctx.lineWidth = 1.2; ctx.stroke();
+    /* ── crisp rim ── */
+    ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2);
+    ctx.strokeStyle = `rgba(${220+w},${245},${240},.72)`;
+    ctx.lineWidth = 1.3; ctx.stroke();
 
-    // top-left highlight
-    const shine = ctx.createRadialGradient(-r*.3,-r*.35,0, -r*.24,-r*.3,r*.46);
-    shine.addColorStop(0, `hsla(${this.hue-10},90%,98%,.82)`);
-    shine.addColorStop(1, `hsla(${this.hue},75%,92%,0)`);
+    /* ── curved top-left highlight arc ── */
     ctx.beginPath();
-    ctx.ellipse(-r*.3,-r*.35,r*.28,r*.18,-.38,0,Math.PI*2);
-    ctx.fillStyle = shine; ctx.fill();
+    ctx.arc(-r*.08,-r*.08, r*.68, -Math.PI*.82, -Math.PI*.18);
+    ctx.strokeStyle = `rgba(255,254,${248-w},.42)`;
+    ctx.lineWidth = 1.0; ctx.stroke();
 
-    // small glint dot
+    /* ── bright shine ellipse ── */
+    const sh = ctx.createRadialGradient(-r*.3,-r*.34,0, -r*.24,-r*.28,r*.38);
+    sh.addColorStop(0, `rgba(255,255,255,.92)`);
+    sh.addColorStop(1, `rgba(255,255,255,0)`);
     ctx.beginPath();
-    ctx.arc(-r*.38,-r*.42,r*.058,0,Math.PI*2);
-    ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.fill();
+    ctx.ellipse(-r*.3,-r*.34, r*.24,r*.15, -.36, 0, Math.PI*2);
+    ctx.fillStyle = sh; ctx.fill();
 
-    // bottom-right inner color reflection
-    const refl = ctx.createRadialGradient(r*.3,r*.32,0, r*.26,r*.28,r*.38);
-    refl.addColorStop(0, `hsla(${this.hue+10},70%,75%,.28)`);
-    refl.addColorStop(1, `hsla(${this.hue},60%,65%,0)`);
+    /* ── tiny glint dot ── */
     ctx.beginPath();
-    ctx.ellipse(r*.3,r*.32,r*.24,r*.16,.3,0,Math.PI*2);
-    ctx.fillStyle = refl; ctx.fill();
+    ctx.arc(-r*.37,-r*.41, r*.052, 0, Math.PI*2);
+    ctx.fillStyle = 'rgba(255,255,255,.96)'; ctx.fill();
 
     ctx.restore();
   }
 }
 
-// Initial spawn — dense fill
+/* dense initial fill: ~1 bubble per 7500 px² */
 function spawnInitial() {
-  const count = Math.max(28, Math.floor((W * H) / 28000));
+  if (!W || !H) return;
+  const count = Math.max(48, Math.floor(W * H / 7500));
   for (let i = 0; i < count; i++) {
-    setTimeout(() => bubbles.push(new Bubble()), i * 40);
+    setTimeout(() => bubbles.push(new Bubble()), i * 22);
   }
 }
 
-// Keep bubbles dense: target ~1 bubble per 22000px²
+/* maintain density continuously */
 function maintain() {
-  const target = Math.max(22, Math.floor((W * H) / 22000));
+  const target = Math.max(48, Math.floor(W * H / 7500));
   while (bubbles.length < target) {
-    // spawn from a random edge
-    const edge = Math.floor(Math.random() * 4);
-    let x, y, r = rnd(22, 95);
+    const edge = Math.floor(Math.random() * 4), r = rnd(14, 72);
+    let x, y;
     if      (edge === 0) { x = rnd(0,W); y = H + r; }
     else if (edge === 1) { x = -r;       y = rnd(0,H); }
     else if (edge === 2) { x = W + r;    y = rnd(0,H); }
@@ -870,15 +825,13 @@ function maintain() {
   }
 }
 
-let lastMaintain = 0;
+let lastM = 0;
 function loop(t) {
   if (_cur === 'main' && W > 0 && H > 0) {
     ctx.clearRect(0, 0, W, H);
-    if (t - lastMaintain > 1200) { maintain(); lastMaintain = t; }
-
+    if (t - lastM > 1000) { maintain(); lastM = t; }
     const rect = canvas.getBoundingClientRect();
     const lx = mx - rect.left, ly = my - rect.top;
-
     bubbles.forEach(b => {
       b.mouse(lx, ly);
       b.update(t);
@@ -889,7 +842,7 @@ function loop(t) {
 }
 requestAnimationFrame(loop);
 
-// ── INIT ──
+/* ── INIT ── */
 window.addEventListener('load', () => {
   resizeCanvas();
   spawnInitial();
