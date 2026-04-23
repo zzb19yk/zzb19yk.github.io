@@ -9,14 +9,15 @@
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
 :root {
-  --black:   #000000;
   --navy:    #0e1520;
   --navy2:   #111d2e;
   --teal:    #7ecdc8;
   --ivory:   #fdfbf4;
+  --ivory2:  #f5f0e8;
+  --dark-nav:#080f1a;
   --text:    #1a1a1a;
   --mid:     #666;
-  --nav-h:   70px;
+  --nav-h:   60px;
 }
 
 html, body {
@@ -24,112 +25,205 @@ html, body {
   font-family:'DM Sans', sans-serif;
   overflow:hidden;
   cursor:none;
-  background: var(--black); /* 기본 배경 블랙 */
+  background: #000; /* 첫 화면 블랙 요청 반영 */
 }
 
 /* ── CURSOR ── */
 #cursor {
-  position:fixed; width:13px; height:13px; border-radius:50%;
-  background: #fdf4dc; pointer-events:none; z-index:99999;
+  position:fixed;
+  width:13px; height:13px;
+  border-radius:50%;
+  background: #fdf4dc; /* 메인/엔트리용 아이보리 */
+  pointer-events:none;
+  z-index:99999;
   transform:translate(-50%,-50%);
-  transition:width .15s, height .15s, background .25s;
-  box-shadow:0 0 10px rgba(253,244,220,0.6);
+  transition:width .13s, height .13s, background .25s;
+  box-shadow:0 0 7px rgba(253,244,220,.55);
 }
-#cursor.big { width:40px; height:40px; background:rgba(253,244,220,0.2); }
-body.light-cursor #cursor { background: var(--teal); box-shadow:0 0 10px rgba(126,205,200,0.6); }
-body.light-cursor #cursor.big { background:rgba(126,205,200,0.25); }
+#cursor.big {
+  width:36px; height:36px;
+  background:rgba(253,244,220,.3);
+}
+/* 소개 등 밝은 페이지용 민트 커서 */
+body.light-cursor #cursor {
+  background: var(--teal);
+  box-shadow:0 0 7px rgba(126,205,200,.55);
+}
+body.light-cursor #cursor.big {
+  background:rgba(126,205,200,.28);
+}
 
 /* ── VIEWS ── */
-.view { position:fixed; inset:0; display:none; flex-direction:column; opacity:0; transition:opacity .5s ease; }
+.view {
+  position:fixed; inset:0;
+  display:none; flex-direction:column;
+  opacity:0;
+  transition:opacity .42s ease;
+}
 .view.active  { display:flex; }
 .view.visible { opacity:1; }
 
-/* ① ENTRY (BLACK) */
-#view-entry { background: #000; align-items:center; justify-content:center; }
-.entry-title { font-family:'Cormorant Garamond', serif; font-size:clamp(32px,5vw,52px); color:#fff; margin-bottom:40px; font-weight:300; }
-.entry-choices { display:flex; gap:20px; }
-.entry-btn {
-  width:220px; padding:30px; border:1px solid rgba(255,255,255,0.2); border-radius:12px;
-  background:rgba(255,255,255,0.03); color:#fff; cursor:none; transition:all .3s;
+/* ════════════════════════════
+   ENTRY (BLACK)
+════════════════════════════ */
+#view-entry {
+  background: #000;
+  align-items:center; justify-content:center;
 }
-.entry-btn:hover { border-color:var(--teal); transform:translateY(-5px); background:rgba(126,205,200,0.05); }
-.eb-title { font-family:'Cormorant Garamond', serif; font-size:28px; margin-bottom:10px; }
-.eb-desc { font-size:13px; color:rgba(255,255,255,0.5); line-height:1.6; }
+.entry-top-label {
+  font-family:'Cormorant Garamond', serif;
+  font-size:14px; letter-spacing:.32em; text-transform:uppercase;
+  color:rgba(126,205,200,.55);
+  margin-bottom:36px;
+}
+.entry-title {
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(32px,4.5vw,52px);
+  font-weight:300; color:rgba(255,255,255,.92);
+  text-align:center; margin-bottom:14px;
+}
+.entry-sub {
+  font-size:16px; color:rgba(255,255,255,.52);
+  letter-spacing:.04em; margin-bottom:58px;
+}
+.entry-choices { display:flex; gap:18px; }
+.entry-btn {
+  position:relative; width:208px; padding:28px 22px 26px;
+  border:1px solid rgba(126,205,200,.2); border-radius:8px;
+  background:rgba(126,205,200,.03);
+  cursor:none; text-align:left;
+  transition:all .25s;
+}
+.entry-btn:hover { border-color:var(--teal); transform:translateY(-4px); background:rgba(126,205,200,0.08); }
+.eb-mode  { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); margin-bottom:9px; }
+.eb-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:rgba(255,255,255,0.9); margin-bottom:12px; }
+.eb-desc  { font-size:14px; line-height:1.8; color:rgba(255,255,255,.52); }
 
-/* ② NAVBAR */
+/* ════════════════════════════
+   NAVBAR
+════════════════════════════ */
 #navbar {
-  position:fixed; top:0; left:0; right:0; height:var(--nav-h);
-  display:none; align-items:center; justify-content:space-between; padding:0 50px;
-  z-index:1000; background:rgba(8, 15, 26, 0.95); border-bottom:1px solid rgba(126,205,200,0.1);
+  position:fixed; top:0; left:0; right:0;
+  height:var(--nav-h);
+  display:none; align-items:center;
+  justify-content:space-between;
+  padding:0 40px;
+  z-index:500;
+  background:var(--dark-nav);
+  border-bottom:1px solid rgba(126,205,200,.09);
 }
 #navbar.show { display:flex; }
-.nav-logo { font-family:'Cormorant Garamond',serif; font-size:22px; color:#fff; border:none; background:none; cursor:none; }
-.nav-links { display:flex; gap:35px; list-style:none; }
+.nav-logo {
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px; font-weight:300; letter-spacing:.1em;
+  color:rgba(255,255,255,.82);
+  cursor:none; background:none; border:none;
+}
+.nav-links { display:flex; gap:28px; list-style:none; }
 .nav-links button {
-  font-size:13px; color:rgba(255,255,255,0.5); background:none; border:none; cursor:none;
-  padding:5px 0; transition:color .3s; position:relative;
+  font-family:'DM Sans',sans-serif;
+  font-size:12px; letter-spacing:.07em;
+  color:rgba(255,255,255,.48);
+  background:none; border:none; cursor:none;
+  position:relative; padding:2px 0;
 }
-.nav-links button:hover, .nav-links button.active { color:#fff; }
+.nav-links button.active { color:rgba(255,255,255,.9); }
 .nav-links button.active::after {
-  content:''; position:absolute; bottom:0; left:0; width:100%; height:1px; background:var(--teal);
+  content:''; position:absolute; bottom:-2px; left:0; width:100%; height:1px; background:var(--teal);
+}
+#mode-badge {
+  font-size:12px; font-weight:500; letter-spacing:.06em;
+  padding:8px 18px; border:1.5px solid var(--teal); border-radius:99px;
+  color:var(--teal); background:rgba(126,205,200,.1); cursor:none;
 }
 
-/* ③ MAIN (BUBBLES) */
-#view-main { background: var(--navy2); }
-#bubble-canvas { position:absolute; inset:0; width:100%; height:100%; }
-.main-prompt-card {
-  position:absolute; top:42%; left:50%; transform:translate(-50%, -50%);
-  background:rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.1);
-  padding:40px 60px; border-radius:20px; backdrop-filter:blur(10px);
-  text-align:center; pointer-events:none; z-index:10;
+/* ════════════════════════════
+   MAIN / BUBBLES
+════════════════════════════ */
+#view-main { background:var(--navy2); }
+#bubble-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+
+/* 중앙 안내 카드 요청 반영 */
+.main-center-card {
+  position:absolute; top:45%; left:50%; transform:translate(-50%, -50%);
+  z-index:20; background:rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.1);
+  padding:40px 60px; border-radius:15px; backdrop-filter:blur(10px);
+  text-align:center; pointer-events:none;
 }
-.main-prompt-card h2 {
+.main-center-card h2 {
   font-family:'Cormorant Garamond', serif; font-size:32px; color:#fff;
-  font-weight:300; margin-bottom:15px; letter-spacing:0.05em;
+  font-weight:300; margin-bottom:12px; letter-spacing:0.05em;
 }
-.main-prompt-card p { font-size:14px; color:rgba(255,255,255,0.4); letter-spacing:0.1em; }
+.main-center-card p {
+  font-size:14px; color:rgba(255, 255, 255, 0.4); letter-spacing:0.1em;
+}
 
-/* ④ CONTENT PAGES (CENTERED) */
-.content-view { background:var(--ivory); overflow-y:auto; padding-top:var(--nav-h); }
+/* ════════════════════════════
+   CONTENT PAGES (CENTERED)
+════════════════════════════ */
+.content-view {
+  background:var(--ivory);
+  overflow-y:auto;
+  padding-top:var(--nav-h);
+}
 .page-inner {
-  max-width:800px; margin:0 auto; width:100%; padding:100px 40px 150px; /* 하단 공간 확보 */
+  min-height:calc(100vh - var(--nav-h));
+  max-width:800px; /* 좌우 너무 넓지 않게 조정 */
+  margin:0 auto;
+  width:100%;
+  padding:80px 40px 150px; /* 맨 밑 공간 넉넉히 확보 */
   display:flex; flex-direction:column;
 }
-.section-title { font-family:'Cormorant Garamond',serif; font-size:56px; font-weight:300; margin-bottom:40px; color:var(--text); }
+.section-label { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--teal); margin-bottom:16px; }
+.section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(38px,5.5vw,60px); font-weight:300; line-height:1.1; margin-bottom:30px; color:var(--text); }
+.section-body { font-size:15px; line-height:1.9; color:var(--mid); max-width:560px; }
 
-/* CAREER STYLES */
-.career-block { margin-top:60px; }
+/* blind mask */
+.blind-mask { background:rgba(20,20,20,.82); color:transparent !important; border-radius:3px; user-select:none; padding:0 4px; }
+
+/* ── CAREER 가시성 개선 ── */
+.career-block { margin-top:50px; }
 .career-header {
-  margin-bottom:25px; padding-bottom:15px; border-bottom:1px solid rgba(0,0,0,0.1);
+  margin-bottom:20px;
+  padding-bottom:15px;
+  border-bottom:1px solid rgba(0,0,0,0.08);
+  display: flex; justify-content: space-between; align-items: baseline; /* 연도-회사 수평 배치 */
 }
-.career-who { font-size:20px; font-weight:500; color:var(--text); display:flex; align-items:baseline; gap:12px; }
-.career-meta { font-size:14px; color:var(--teal); font-weight:400; }
+.career-who {
+  font-family:'Cormorant Garamond',serif;
+  font-size:26px; font-weight:300; color:var(--text);
+}
+.career-meta {
+  font-size:14px; letter-spacing:.05em; color:var(--teal);
+}
 
-.card-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px; }
 .card {
-  background:#fff; border:1px solid rgba(0,0,0,0.05); border-radius:15px;
-  padding:25px; cursor:none; position:relative; transition:all .3s;
-  min-height:160px; display:flex; flex-direction:column; justify-content:space-between;
+  background:rgba(126,205,200,.05); border:1px solid rgba(126,205,200,.18);
+  border-radius:10px; padding:24px; cursor:none; position:relative; transition:all .2s;
+  min-height:140px; /* 세로 높이 살짝 증가 */
+  display: flex; flex-direction: column; justify-content: space-between;
 }
-.card:hover { transform:translateY(-8px); box-shadow:0 15px 35px rgba(0,0,0,0.08); }
-.card-title { font-family:'Cormorant Garamond',serif; font-size:20px; margin-bottom:10px; line-height:1.3; }
-.card-more { font-size:11px; color:var(--teal); align-self:flex-end; }
+.card:hover { transform:translateY(-4px); box-shadow:0 12px 28px rgba(126,205,200,.14); border-color:rgba(126,205,200,.38); }
+.card-title { font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--text); margin-bottom:8px; line-height:1.3; white-space: nowrap; } /* 한 줄 고정 */
+.card-desc { font-size:13px; color:var(--mid); line-height:1.6; margin-bottom: 20px; }
+.card-more { font-size:10px; letter-spacing:.06em; color:rgba(126,205,200,.45); align-self: flex-end; }
 
-/* BLIND MASK */
-.blind-mask { background:#1a1a1a; color:transparent !important; border-radius:4px; padding:0 6px; user-select:none; }
-
-/* ── POPUP ── */
+/* ── POPUP (Original Style) ── */
 #popup-overlay {
-  position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(8px);
+  position:fixed; inset:0; background:rgba(8,14,26,.78); backdrop-filter:blur(7px);
   z-index:2000; display:none; align-items:center; justify-content:center; padding:20px;
 }
 #popup-overlay.open { display:flex; }
-#popup-box { background:#fff; border-radius:20px; width:100%; max-width:500px; padding:50px; position:relative; }
-#popup-close { position:absolute; top:25px; right:25px; border:none; background:none; font-size:24px; cursor:none; }
+#popup-box {
+  background:var(--ivory); border-radius:14px; width:100%; max-width:520px; max-height:78vh;
+  overflow-y:auto; padding:40px; position:relative; box-shadow:0 24px 60px rgba(0,0,0,.38);
+}
+#popup-close { position:absolute; top:18px; right:18px; width:32px; height:32px; border-radius:50%; background:rgba(126,205,200,.1); border:none; cursor:none; }
 
-@media (max-width:768px) {
-  .card-grid { grid-template-columns:1fr; }
-  .main-prompt-card { width:80%; padding:30px; }
+@media (max-width:600px) {
+  .career-header { flex-direction: column; gap: 5px; }
+  .card-title { white-space: normal; }
 }
 </style>
 </head>
@@ -138,7 +232,7 @@ body.light-cursor #cursor.big { background:rgba(126,205,200,0.25); }
 <div id="cursor"></div>
 
 <nav id="navbar">
-  <button class="nav-logo" onclick="goTo('main')">zzb19yk</button>
+  <button class="nav-logo" id="nav-logo-btn" onclick="goTo('main')">zzb19yk</button>
   <ul class="nav-links">
     <li><button onclick="goTo('about')">소개</button></li>
     <li><button onclick="goTo('career')">커리어</button></li>
@@ -146,170 +240,158 @@ body.light-cursor #cursor.big { background:rgba(126,205,200,0.25); }
     <li><button onclick="goTo('life')">개인적 삶</button></li>
     <li><button onclick="goTo('contact')">연락처</button></li>
   </ul>
-  <button id="mode-badge" style="color:var(--teal); background:none; border:1px solid var(--teal); padding:5px 15px; border-radius:20px; font-size:11px; cursor:none;" onclick="resetEntry()">MODE</button>
+  <button id="mode-badge" onclick="resetEntry()">— / —</button>
 </nav>
 
-<div class="view active visible" id="view-entry">
+<div class="view" id="view-entry">
+  <p class="entry-top-label">Portfolio</p>
   <h1 class="entry-title">어떻게 보실 건가요?</h1>
+  <p class="entry-sub">공개 범위를 선택해주세요</p>
   <div class="entry-choices">
     <button class="entry-btn" onclick="selectMode('blind')">
+      <div class="eb-mode">Mode 01</div>
       <div class="eb-title">Blind</div>
-      <div class="eb-desc">개인정보를 보호한 채<br>이력을 검토합니다.</div>
+      <div class="eb-desc">이름, 학력, 연락처,<br>별명이 비공개됩니다.</div>
     </button>
     <button class="entry-btn" onclick="selectMode('open')">
+      <div class="eb-mode">Mode 02</div>
       <div class="eb-title">Open</div>
-      <div class="eb-desc">모든 정보를 공개하고<br>상세히 확인합니다.</div>
+      <div class="eb-desc">이름, 학력, 연락처,<br>별명이 공개됩니다.</div>
     </button>
   </div>
 </div>
 
 <div class="view" id="view-main">
   <canvas id="bubble-canvas"></canvas>
-  <div class="main-prompt-card">
+  <div class="main-center-card">
     <h2>EXPLORE PORTFOLIO</h2>
-    <p>상단 메뉴를 통해 저의 이야기를 확인해보세요</p>
+    <p>위 메뉴바를 클릭하여 포트폴리오를 탐색해보세요</p>
   </div>
 </div>
 
 <div class="view content-view" id="view-about">
   <div class="page-inner">
-    <h2 class="section-title">Hello.</h2>
-    <p style="font-size:18px; line-height:1.8; color:var(--mid);">
-      배우는 것을 즐기며, 일의 완결성을 높이는 것에 집요하게 집중하는 인사행정 전문가입니다. 
-      구조화된 시스템 안에서 효율을 찾는 것을 좋아합니다.
+    <div class="section-label">About</div>
+    <h2 class="section-title">저는 이런 사람입니다.</h2>
+    <p class="section-body">
+      배우는 것을 좋아하고,<br>
+      완결성을 높이는 것에 집중하는<br>
+      인사행정 팀원<br><br>
+      이름 &nbsp;·&nbsp; <span class="blind-field">홍길동</span><br>
+      별명 &nbsp;·&nbsp; <span class="blind-field">zzb19yk</span>
     </p>
-    <div style="margin-top:50px; border-top:1px solid #eee; padding-top:30px;">
-        <p>Name · <span class="blind-field">홍길동</span></p>
-        <p>Identity · <span class="blind-field">zzb19yk</span></p>
-    </div>
   </div>
 </div>
 
 <div class="view content-view" id="view-career">
   <div class="page-inner">
-    <h2 class="section-title">Career.</h2>
+    <div class="section-label">Career</div>
+    <h2 class="section-title">걸어온 길.</h2>
 
     <div class="career-block">
       <div class="career-header">
-        <div class="career-who">
-          <span>바텍이우홀딩스 · 담당 (정규직)</span>
-          <span class="career-meta">2024.09 — Present</span>
-        </div>
+        <div class="career-who">바텍이우홀딩스 · 담당 (정규직)</div>
+        <div class="career-meta">2024.09 — 현재</div>
       </div>
       <div class="card-grid">
-        <div class="card" onclick="openPopup('HR 시스템 운영 및 고도화','Career','7개 계열사의 성과평가 및 승진 시스템을 관리하며 데이터 정합성을 유지합니다.')">
-          <div class="card-title">HR 시스템 운영 및 고도화</div>
-          <span class="card-more">MORE →</span>
-        </div>
-        <div class="card" onclick="openPopup('전자계약 시스템 도입','Career','Adobe Sign을 전사 도입하여 계약 프로세스를 디지털화하고 운영 매뉴얼을 구축했습니다.')">
-          <div class="card-title">전자계약 시스템 도입</div>
-          <span class="card-more">MORE →</span>
+        <div class="card" onclick="openPopup('프로젝트명 A','Career','설명...')">
+          <div class="card-title">프로젝트명 A</div>
+          <div class="card-desc">한 줄 요약을 여기에 작성</div>
+          <span class="card-more">자세히 →</span>
         </div>
       </div>
     </div>
 
-    <div class="career-block">
-        <div class="career-header">
-          <div class="career-who">
-            <span>현대엔지비 · 매니저 (인턴)</span>
-            <span class="career-meta">2022.06 — 2022.12</span>
-          </div>
+    <div class="career-block" style="margin-top:80px;">
+      <div class="section-label">Education</div>
+      <div class="career-header">
+        <div class="career-who"><span class="blind-field">서강대학교</span> · 종교학, 심리학, 경영학</div>
+        <div class="career-meta">2018 — 2024</div>
+      </div>
+      <div class="card-grid">
+        <div class="card" onclick="openPopup('중국문화학과 행정조교','Education','교수, 조교, 학생, 학부모와 소통하며 학과 행사를 운영했습니다.')">
+          <div class="card-title">중국문화학과 행정조교</div>
+          <div class="card-desc">소통, 출결, 행사 운영</div>
+          <span class="card-more">자세히 →</span>
         </div>
-        <div class="card-grid">
-            <div class="card" onclick="openPopup('교육 운영 지원','Career','기술 교육 프로그램 운영 및 행정 지원을 담당했습니다.')">
-              <div class="card-title">기술 교육 운영 지원</div>
-              <span class="card-more">MORE →</span>
-            </div>
-        </div>
-    </div>
-
-    <div style="margin-top:100px;">
-        <h3 style="font-family:'Cormorant Garamond'; font-size:32px; margin-bottom:30px;">Education</h3>
-        <div class="career-who">
-            <span><span class="blind-field">서강대학교</span> · 종교학, 심리학, 경영학</span>
-            <span class="career-meta">2018.03 — 2024.02</span>
-        </div>
-        <div class="card-grid" style="margin-top:20px;">
-            <div class="card" onclick="openPopup('중국문화학과 행정조교','Education','타 학과생임에도 불구하고 뛰어난 소통 능력을 바탕으로 학과 행정 및 행사 운영을 완수했습니다.')">
-                <div class="card-title" style="white-space: nowrap;">중국문화학과 행정조교</div>
-                <span class="card-more">MORE →</span>
-            </div>
-        </div>
+      </div>
     </div>
   </div>
 </div>
 
 <div class="view content-view" id="view-skills">
-    <div class="page-inner">
-      <h2 class="section-title">Skills.</h2>
-      <div class="card-grid">
-        <div class="card"><div class="card-title">인사시스템(e-HR) 운영</div></div>
-        <div class="card"><div class="card-title">데이터 분석 및 가공</div></div>
-        <div class="card"><div class="card-title">프로세스 설계 및 매뉴얼화</div></div>
-        <div class="card"><div class="card-title">외국어 소통 (English)</div></div>
-      </div>
+  <div class="page-inner">
+    <div class="section-label">Skills</div>
+    <h2 class="section-title">할 수 있는 것들.</h2>
+    <div class="card-grid" style="margin-top:44px">
+      <div class="card" onclick="openPopup('스킬 1','Skills','내용...')"><div class="card-title">스킬 1</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
     </div>
+  </div>
 </div>
 
 <div class="view content-view" id="view-life">
-    <div class="page-inner">
-      <h2 class="section-title">Life.</h2>
-      <div class="card-grid">
-        <div class="card"><div class="card-title">⚽️ Soccer & Club</div></div>
-        <div class="card"><div class="card-title">🎸 Bass Guitar</div></div>
-        <div class="card"><div class="card-title">🎮 Football Manager</div></div>
-        <div class="card"><div class="card-title">✈️ Travel & Walking</div></div>
-      </div>
+  <div class="page-inner">
+    <div class="section-label">Life</div>
+    <h2 class="section-title">일 밖의 나.</h2>
+    <div class="card-grid" style="margin-top:44px">
+      <div class="card" onclick="openPopup('독서','Life','책 이야기...')"><div class="card-title">📚 독서</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
+      <div class="card" onclick="openPopup('음악','Life','음악 이야기...')"><div class="card-title">🎵 음악</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
+      <div class="card" onclick="openPopup('여행','Life','여행 이야기...')"><div class="card-title">✈️ 여행</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
+      <div class="card" onclick="openPopup('요리','Life','요리 이야기...')"><div class="card-title">🍳 요리</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
     </div>
+  </div>
 </div>
 
 <div class="view content-view" id="view-contact">
-    <div class="page-inner" style="align-items: center; text-align: center;">
-      <h2 class="section-title">Contact.</h2>
-      <p style="margin-bottom:40px; color:var(--mid);">새로운 도전에 대해 이야기하는 것을 언제든 환영합니다.</p>
-      <a href="mailto:your@email.com" class="blind-field" style="font-size:24px; color:var(--text); text-decoration:none; border-bottom:1px solid #000; padding-bottom:5px;">your@email.com</a>
+  <div class="page-inner">
+    <div class="section-label">Contact</div>
+    <h2 class="section-title">함께 이야기해요.</h2>
+    <div class="contact-links" style="margin-top:30px;">
+      <button class="contact-link" id="email-btn">✉ <span class="blind-field">your@email.com</span></button>
     </div>
+  </div>
 </div>
 
 <div id="popup-overlay" onclick="if(event.target===this)closePopup()">
   <div id="popup-box">
     <button id="popup-close" onclick="closePopup()">✕</button>
-    <h3 id="popup-title" style="font-family:'Cormorant Garamond'; font-size:28px; margin-bottom:20px;"></h3>
-    <p id="popup-body" style="line-height:1.8; color:var(--mid);"></p>
+    <div id="popup-tag" style="font-size:9px; color:var(--teal); margin-bottom:12px; letter-spacing:.2em;"></div>
+    <div id="popup-title" style="font-family:'Cormorant Garamond',serif; font-size:28px; color:var(--text); margin-bottom:18px;"></div>
+    <div id="popup-body" style="font-size:14px; line-height:1.9; color:var(--mid); white-space:pre-wrap;"></div>
   </div>
 </div>
 
 <script>
 let _mode = null, _cur = 'entry';
 
-/* CURSOR */
+/* ── CURSOR ── */
 const curEl = document.getElementById('cursor');
+let mx = -100, my = -100;
 document.addEventListener('mousemove', e => {
-  curEl.style.left = e.clientX + 'px';
-  curEl.style.top = e.clientY + 'px';
+  mx = e.clientX; my = e.clientY;
+  curEl.style.left = mx + 'px'; curEl.style.top = my + 'px';
 });
 document.addEventListener('mouseover', e => {
   curEl.classList.toggle('big', !!e.target.closest('button, .card, a'));
 });
 
-/* ROUTER */
+/* ── ROUTER ── */
 function showView(id) {
-  const views = document.querySelectorAll('.view');
-  views.forEach(v => {
+  document.querySelectorAll('.view').forEach(v => {
     v.classList.remove('visible');
-    setTimeout(() => { if(!v.classList.contains('visible')) v.classList.remove('active'); }, 500);
+    setTimeout(() => { if (!v.classList.contains('visible')) v.classList.remove('active'); }, 450);
   });
-
-  const target = document.getElementById('view-' + id);
-  target.classList.add('active');
-  setTimeout(() => target.classList.add('visible'), 50);
+  const el = document.getElementById('view-' + id);
+  el.classList.add('active');
+  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
   
   _cur = id;
   document.getElementById('navbar').classList.toggle('show', id !== 'entry');
   document.body.classList.toggle('light-cursor', ['about','career','skills','life','contact'].includes(id));
-  
-  document.querySelectorAll('.nav-links button').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('onclick').includes(`'${id}'`));
+
+  document.querySelectorAll('.nav-links button').forEach(b => {
+    const label = { about:'소개', career:'커리어', skills:'역량', life:'개인적 삶', contact:'연락처' }[id];
+    b.classList.toggle('active', b.textContent.trim() === label);
   });
 }
 function goTo(id) { showView(id); }
@@ -318,82 +400,72 @@ function resetEntry() { showView('entry'); }
 function selectMode(mode) {
   _mode = mode;
   document.querySelectorAll('.blind-field').forEach(el => el.classList.toggle('blind-mask', mode === 'blind'));
-  document.getElementById('mode-badge').textContent = mode.toUpperCase();
+  document.getElementById('mode-badge').textContent = mode === 'blind' ? '🔒 Blind' : '🔓 Open';
   showView('main');
 }
 
 function openPopup(title, tag, body) {
+  document.getElementById('popup-tag').textContent = tag;
   document.getElementById('popup-title').textContent = title;
   document.getElementById('popup-body').textContent = body;
   document.getElementById('popup-overlay').classList.add('open');
 }
 function closePopup() { document.getElementById('popup-overlay').classList.remove('open'); }
 
-/* BUBBLES */
+/* ── BUBBLES (고급스러운 움직임 복원 + 꽉 차게) ── */
 const canvas = document.getElementById('bubble-canvas');
 const ctx = canvas.getContext('2d');
 let W, H, bubbles = [];
 
-function resize() {
-  W = canvas.width = window.innerWidth;
-  H = canvas.height = window.innerHeight;
-}
+function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
 window.addEventListener('resize', resize);
 resize();
 
 class Bubble {
-  constructor() {
-    this.reset();
-    this.y = Math.random() * H;
-  }
-  reset() {
-    this.r = 10 + Math.random() * 50;
+  constructor() { this.init(); this.y = Math.random() * H; }
+  init() {
+    this.r = 15 + Math.random() * 60;
     this.x = Math.random() * W;
-    this.y = H + this.r + Math.random() * 100;
-    this.vx = (Math.random() - 0.5) * 0.5;
-    this.vy = -0.3 - Math.random() * 0.8;
-    this.opacity = 0.1 + Math.random() * 0.3;
+    this.y = H + this.r + Math.random() * 200;
+    this.vx = (Math.random() - 0.5) * 0.4;
+    this.vy = -0.4 - Math.random() * 1.2;
+    this.opacity = 0.5 + Math.random() * 0.3;
   }
-  update(mx, my) {
-    this.x += this.vx;
-    this.y += this.vy;
-    
-    // Mouse interaction (Soft move)
-    const dx = mx - this.x;
-    const dy = my - this.y;
+  update() {
+    this.x += this.vx; this.y += this.vy;
+    // 마우스 반응 (부드럽게 밀려남)
+    const dx = mx - this.x; const dy = my - this.y;
     const dist = Math.sqrt(dx*dx + dy*dy);
-    if(dist < 150) {
-        this.x -= dx * 0.02;
-        this.y -= dy * 0.02;
-    }
-
-    if (this.y < -this.r) this.reset();
+    if(dist < 150) { this.x -= dx * 0.01; this.y -= dy * 0.01; }
+    if (this.y < -this.r) this.init();
   }
   draw() {
+    ctx.save();
+    ctx.globalAlpha = this.opacity;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-    ctx.fill();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
+    // 고급스러운 화이트 그라데이션 복원
+    const grad = ctx.createRadialGradient(this.x-this.r*0.3, this.y-this.r*0.3, 0, this.x, this.y, this.r);
+    grad.addColorStop(0, 'rgba(255,255,255,0.4)');
+    grad.addColorStop(1, 'rgba(220,240,255,0.1)');
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.restore();
   }
 }
 
-// Create many bubbles for "tight" feeling
-for(let i=0; i<150; i++) bubbles.push(new Bubble());
-
-let mx=0, my=0;
-window.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+for(let i=0; i<80; i++) bubbles.push(new Bubble());
 
 function loop() {
-  ctx.clearRect(0, 0, W, H);
   if(_cur === 'main') {
-    bubbles.forEach(b => {
-      b.update(mx, my);
-      b.draw();
-    });
+    ctx.clearRect(0,0,W,H);
+    bubbles.forEach(b => { b.update(); b.draw(); });
   }
   requestAnimationFrame(loop);
 }
 loop();
+
+showView('entry');
 </script>
 </body>
 </html>
