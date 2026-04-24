@@ -513,21 +513,19 @@ body.light-cursor #cursor.big {
           <div class="card-desc">소통, 출결, 행사 운영</div>
           <span class="card-more">자세히 →</span>
         </div>
-        <div class="card" onclick="openPopup('인사관리학회 HEROs','Education','2020.09 ~ 2023.06 / 브랜딩팀 팀장\n\n인사 Case Study, 조별 프로젝트 및 발표, 학회 인스타그램 운영')">
+        <div class="card" onclick="openPopup('인사관리학회 HEROs','Education','2020.09 ~ 2023.06 / 브랜딩팀 팀장\n인사 Case Study, 조별 프로젝트 및 발표, 학회 인스타그램 운영')">
           <div class="card-tag">Activity</div>
           <div class="card-title">인사관리학회 HEROs</div>
           <div class="card-desc">브랜딩팀 팀장</div>
           <span class="card-more">자세히 →</span>
         </div>
-        <div class="card-grid">
         <div class="card" onclick="openPopup('축구동아리 공동회장','Education','2020.04 ~ 2023.12\n실제 참여 인원 약 3배 증가, 직접 훈련 진행, 활동 보고서 작성 등')">
           <div class="card-tag">Activity</div>
           <div class="card-title">축구동아리 공동회장</div>
           <div class="card-desc">활동인원 3배로 확대</div>
           <span class="card-more">자세히 →</span>
         </div>
-        <div class="card-grid">
-        <div class="card" onclick="openPopup('교환학생·University of Sheffield(영국)','Education','2020.02~2020.06 (코로나19로 거주 기간은 2020.02~2020.03\n수강과목 모두 A')">
+        <div class="card" onclick="openPopup('교환학생·University of Sheffield(영국)','Education','2020.02~2020.06 (코로나19로 거주 기간은 2020.02~2020.03)\n- 수강과목 모두 A')">
           <div class="card-tag">Activity</div>
           <div class="card-title">교환학생</div>
           <div class="card-desc">University of Sheffield</div>
@@ -535,6 +533,7 @@ body.light-cursor #cursor.big {
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -612,7 +611,7 @@ body.light-cursor #cursor.big {
     <div class="contact-links">
       <button class="contact-link" id="email-btn">
         <span>✉</span>
-        <span class="blind-field" id="email-text">your@email.com</span>
+        <span class="blind-field" id="email-text">yunkyu.kim.11@email.com</span>
       </button>
       <button class="contact-link" onclick="window.open('https://github.com/zzb19yk','_blank')">
         <span>↗</span> GitHub
@@ -651,13 +650,14 @@ const LIGHT_VIEWS = new Set(['about','career','skills','life','contact']);
 
 /* ── ROUTER ── */
 function showView(id) {
+  const next = document.getElementById('view-' + id);
   document.querySelectorAll('.view').forEach(v => {
+    if (v === next) return;
     v.classList.remove('visible');
     setTimeout(() => { if (!v.classList.contains('visible')) v.classList.remove('active'); }, 450);
   });
-  const el = document.getElementById('view-' + id);
-  el.classList.add('active');
-  requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+  next.classList.add('active');
+  requestAnimationFrame(() => requestAnimationFrame(() => next.classList.add('visible')));
   _cur = id;
 
   const isEntry = id === 'entry';
@@ -670,7 +670,7 @@ function showView(id) {
   });
 
   if (LIGHT_VIEWS.has(id)) {
-    const inner = el.querySelector('.page-inner');
+    const inner = next.querySelector('.page-inner');
     if (inner) { inner.classList.remove('page-enter'); void inner.offsetWidth; inner.classList.add('page-enter'); }
   }
   if (id === 'main') setTimeout(resizeCanvas, 30);
@@ -692,7 +692,7 @@ function selectMode(mode) {
   });
   document.getElementById('nav-logo-btn').textContent = mode === 'blind' ? 'Portfolio' : 'zzb19yk';
   document.getElementById('email-btn').onclick = () => {
-    if (mode === 'open') location.href = 'mailto:your@email.com';
+    if (mode === 'open') location.href = 'mailto:yunkyu.kim.11@email.com';
   };
   document.getElementById('mode-badge').textContent = mode === 'blind' ? '🔒 Blind' : '🔓 Open';
 
