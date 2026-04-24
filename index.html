@@ -25,7 +25,7 @@ html, body {
   font-family:'DM Sans', sans-serif;
   overflow:hidden;
   cursor:none;
-  background: #000; /* 첫 화면 블랙 요청 반영 */
+  background:#000;
 }
 
 /* ── CURSOR ── */
@@ -33,7 +33,7 @@ html, body {
   position:fixed;
   width:13px; height:13px;
   border-radius:50%;
-  background: #fdf4dc; /* 메인/엔트리용 아이보리 */
+  background:#fdf4dc;
   pointer-events:none;
   z-index:99999;
   transform:translate(-50%,-50%);
@@ -44,9 +44,8 @@ html, body {
   width:36px; height:36px;
   background:rgba(253,244,220,.3);
 }
-/* 소개 등 밝은 페이지용 민트 커서 */
 body.light-cursor #cursor {
-  background: var(--teal);
+  background:var(--teal);
   box-shadow:0 0 7px rgba(126,205,200,.55);
 }
 body.light-cursor #cursor.big {
@@ -64,40 +63,64 @@ body.light-cursor #cursor.big {
 .view.visible { opacity:1; }
 
 /* ════════════════════════════
-   ENTRY (BLACK)
+   ENTRY — pure black
 ════════════════════════════ */
 #view-entry {
-  background: #000;
+  background:#000;
   align-items:center; justify-content:center;
+  overflow:hidden;
+}
+.entry-glow {
+  position:absolute;
+  width:600px; height:380px; border-radius:50%;
+  background:radial-gradient(ellipse, rgba(126,205,200,.055) 0%, transparent 65%);
+  top:50%; left:50%; transform:translate(-50%,-58%);
+  pointer-events:none;
 }
 .entry-top-label {
   font-family:'Cormorant Garamond', serif;
   font-size:14px; letter-spacing:.32em; text-transform:uppercase;
   color:rgba(126,205,200,.55);
   margin-bottom:36px;
+  opacity:0; animation:eIn .7s .3s forwards;
 }
 .entry-title {
   font-family:'Cormorant Garamond', serif;
   font-size:clamp(32px,4.5vw,52px);
   font-weight:300; color:rgba(255,255,255,.92);
   text-align:center; margin-bottom:14px;
+  opacity:0; animation:eIn .7s .5s forwards;
 }
 .entry-sub {
   font-size:16px; color:rgba(255,255,255,.52);
   letter-spacing:.04em; margin-bottom:58px;
+  opacity:0; animation:eIn .7s .65s forwards;
 }
-.entry-choices { display:flex; gap:18px; }
+.entry-choices {
+  display:flex; gap:18px;
+  opacity:0; animation:eIn .7s .85s forwards;
+}
 .entry-btn {
   position:relative; width:208px; padding:28px 22px 26px;
   border:1px solid rgba(126,205,200,.2); border-radius:8px;
   background:rgba(126,205,200,.03);
   cursor:none; text-align:left;
-  transition:all .25s;
+  transition:border-color .25s, background .25s, transform .22s;
+  overflow:hidden;
 }
-.entry-btn:hover { border-color:var(--teal); transform:translateY(-4px); background:rgba(126,205,200,0.08); }
+.entry-btn::after {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg,rgba(126,205,200,.07),transparent);
+  opacity:0; transition:opacity .25s;
+}
+.entry-btn:hover { border-color:rgba(126,205,200,.52); transform:translateY(-4px); }
+.entry-btn:hover::after { opacity:1; }
 .eb-mode  { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); margin-bottom:9px; }
-.eb-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:rgba(255,255,255,0.9); margin-bottom:12px; }
+.eb-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:rgba(255,255,255,.9); margin-bottom:12px; }
 .eb-desc  { font-size:14px; line-height:1.8; color:rgba(255,255,255,.52); }
+.eb-arrow { position:absolute; bottom:18px; right:18px; font-size:14px; color:rgba(126,205,200,.38); transition:transform .2s,color .2s; }
+.entry-btn:hover .eb-arrow { transform:translate(3px,-3px); color:var(--teal); }
+@keyframes eIn { to { opacity:1; } }
 
 /* ════════════════════════════
    NAVBAR
@@ -118,7 +141,9 @@ body.light-cursor #cursor.big {
   font-size:20px; font-weight:300; letter-spacing:.1em;
   color:rgba(255,255,255,.82);
   cursor:none; background:none; border:none;
+  transition:color .2s;
 }
+.nav-logo:hover { color:var(--teal); }
 .nav-links { display:flex; gap:28px; list-style:none; }
 .nav-links button {
   font-family:'DM Sans',sans-serif;
@@ -126,40 +151,66 @@ body.light-cursor #cursor.big {
   color:rgba(255,255,255,.48);
   background:none; border:none; cursor:none;
   position:relative; padding:2px 0;
+  transition:color .2s;
 }
-.nav-links button.active { color:rgba(255,255,255,.9); }
-.nav-links button.active::after {
-  content:''; position:absolute; bottom:-2px; left:0; width:100%; height:1px; background:var(--teal);
+.nav-links button::after {
+  content:''; position:absolute; bottom:-2px; left:0;
+  width:0; height:1px; background:var(--teal);
+  transition:width .22s;
 }
+.nav-links button:hover, .nav-links button.active { color:rgba(255,255,255,.9); }
+.nav-links button:hover::after, .nav-links button.active::after { width:100%; }
 #mode-badge {
   font-size:12px; font-weight:500; letter-spacing:.06em;
-  padding:8px 18px; border:1.5px solid var(--teal); border-radius:99px;
-  color:var(--teal); background:rgba(126,205,200,.1); cursor:none;
+  padding:8px 18px;
+  border:1.5px solid var(--teal); border-radius:99px;
+  color:var(--teal); background:rgba(126,205,200,.1);
+  cursor:none; font-family:'DM Sans',sans-serif;
+  transition:background .2s, color .2s;
 }
+#mode-badge:hover { background:var(--teal); color:var(--navy); }
 
 /* ════════════════════════════
    MAIN / BUBBLES
 ════════════════════════════ */
 #view-main { background:var(--navy2); }
-#bubble-canvas { position:absolute; inset:0; width:100%; height:100%; display:block; }
+#bubble-canvas {
+  position:absolute; inset:0;
+  width:100%; height:100%; display:block;
+}
 
-/* 중앙 안내 카드 요청 반영 */
+/* center card */
 .main-center-card {
-  position:absolute; top:45%; left:50%; transform:translate(-50%, -50%);
-  z-index:20; background:rgba(255, 255, 255, 0.05); border:1px solid rgba(255, 255, 255, 0.1);
-  padding:40px 60px; border-radius:15px; backdrop-filter:blur(10px);
-  text-align:center; pointer-events:none;
+  position:absolute;
+  top:46%; left:50%;
+  transform:translate(-50%,-50%);
+  z-index:20;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.1);
+  padding:40px 60px;
+  border-radius:14px;
+  backdrop-filter:blur(10px);
+  -webkit-backdrop-filter:blur(10px);
+  text-align:center;
+  pointer-events:none;
 }
 .main-center-card h2 {
-  font-family:'Cormorant Garamond', serif; font-size:32px; color:#fff;
-  font-weight:300; margin-bottom:12px; letter-spacing:0.05em;
+  font-family:'Cormorant Garamond', serif;
+  font-size:clamp(22px,2.8vw,34px);
+  font-weight:300;
+  color:rgba(255,255,255,.88);
+  letter-spacing:.1em;
+  margin-bottom:14px;
 }
 .main-center-card p {
-  font-size:14px; color:rgba(255, 255, 255, 0.4); letter-spacing:0.1em;
+  font-size:13px;
+  color:rgba(255,255,255,.38);
+  letter-spacing:.07em;
+  line-height:1.7;
 }
 
 /* ════════════════════════════
-   CONTENT PAGES (CENTERED)
+   CONTENT PAGES
 ════════════════════════════ */
 .content-view {
   background:var(--ivory);
@@ -167,63 +218,165 @@ body.light-cursor #cursor.big {
   padding-top:var(--nav-h);
 }
 .page-inner {
-  min-height:calc(100vh - var(--nav-h));
-  max-width:800px; /* 좌우 너무 넓지 않게 조정 */
+  max-width:800px;
   margin:0 auto;
   width:100%;
-  padding:80px 40px 150px; /* 맨 밑 공간 넉넉히 확보 */
-  display:flex; flex-direction:column;
+  padding:72px 40px 200px;
+  display:block;
 }
-.section-label { font-size:9px; letter-spacing:.22em; text-transform:uppercase; color:var(--teal); margin-bottom:16px; }
-.section-title { font-family:'Cormorant Garamond',serif; font-size:clamp(38px,5.5vw,60px); font-weight:300; line-height:1.1; margin-bottom:30px; color:var(--text); }
-.section-body { font-size:15px; line-height:1.9; color:var(--mid); max-width:560px; }
+.section-label {
+  font-size:9px; letter-spacing:.22em; text-transform:uppercase;
+  color:var(--teal); margin-bottom:16px;
+}
+.section-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(38px,5.5vw,62px);
+  font-weight:300; line-height:1.08;
+  margin-bottom:28px; color:var(--text);
+}
+.section-body {
+  font-size:15px; line-height:1.9;
+  color:var(--mid); max-width:560px;
+}
 
 /* blind mask */
-.blind-mask { background:rgba(20,20,20,.82); color:transparent !important; border-radius:3px; user-select:none; padding:0 4px; }
+.blind-mask {
+  background:rgba(20,20,20,.82);
+  color:transparent !important;
+  border-radius:3px;
+  user-select:none; padding:0 4px;
+}
 
-/* ── CAREER 가시성 개선 ── */
-.career-block { margin-top:50px; }
+/* ── CAREER ── */
+.career-block { margin-top:48px; }
+.career-block + .career-block { margin-top:52px; }
 .career-header {
-  margin-bottom:20px;
-  padding-bottom:15px;
-  border-bottom:1px solid rgba(0,0,0,0.08);
-  display: flex; justify-content: space-between; align-items: baseline; /* 연도-회사 수평 배치 */
+  margin-bottom:18px;
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(0,0,0,.08);
+}
+.career-meta {
+  font-size:11px; letter-spacing:.08em;
+  color:rgba(126,205,200,.85);
+  margin-bottom:5px;
 }
 .career-who {
   font-family:'Cormorant Garamond',serif;
-  font-size:26px; font-weight:300; color:var(--text);
-}
-.career-meta {
-  font-size:14px; letter-spacing:.05em; color:var(--teal);
+  font-size:24px; font-weight:300;
+  color:var(--text); line-height:1.2;
 }
 
-.card-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(280px,1fr)); gap:16px; }
+.edu-section { margin-top:64px; margin-bottom:40px; }
+.edu-header {
+  font-size:9px; letter-spacing:.22em; text-transform:uppercase;
+  color:rgba(126,205,200,.65); margin-bottom:20px;
+  padding-bottom:10px;
+  border-bottom:1px solid rgba(126,205,200,.1);
+}
+
+/* shared card grid */
+.card-grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill, minmax(220px,1fr));
+  gap:16px;
+}
 .card {
-  background:rgba(126,205,200,.05); border:1px solid rgba(126,205,200,.18);
-  border-radius:10px; padding:24px; cursor:none; position:relative; transition:all .2s;
-  min-height:140px; /* 세로 높이 살짝 증가 */
-  display: flex; flex-direction: column; justify-content: space-between;
+  background:rgba(126,205,200,.05);
+  border:1px solid rgba(126,205,200,.18);
+  border-radius:10px;
+  padding:22px 22px 44px;
+  cursor:none; position:relative;
+  transition:transform .2s, box-shadow .2s, border-color .2s;
+  min-height:120px;
 }
-.card:hover { transform:translateY(-4px); box-shadow:0 12px 28px rgba(126,205,200,.14); border-color:rgba(126,205,200,.38); }
-.card-title { font-family:'Cormorant Garamond',serif; font-size:20px; color:var(--text); margin-bottom:8px; line-height:1.3; white-space: nowrap; } /* 한 줄 고정 */
-.card-desc { font-size:13px; color:var(--mid); line-height:1.6; margin-bottom: 20px; }
-.card-more { font-size:10px; letter-spacing:.06em; color:rgba(126,205,200,.45); align-self: flex-end; }
+.card:hover {
+  transform:translateY(-4px);
+  box-shadow:0 12px 28px rgba(126,205,200,.14);
+  border-color:rgba(126,205,200,.38);
+}
+.card-tag {
+  font-size:9px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--teal); margin-bottom:8px;
+}
+.card-title {
+  font-family:'Cormorant Garamond',serif;
+  font-size:19px; color:var(--text);
+  margin-bottom:7px; line-height:1.3;
+  white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis;
+}
+.card-desc { font-size:12px; color:var(--mid); line-height:1.62; }
+.card-more {
+  position:absolute; bottom:14px; right:16px;
+  font-size:10px; letter-spacing:.06em;
+  color:rgba(126,205,200,.45); white-space:nowrap;
+}
+.card:hover .card-more { color:var(--teal); }
 
-/* ── POPUP (Original Style) ── */
+/* ── CONTACT ── */
+.contact-links { display:flex; flex-direction:column; gap:12px; margin-top:32px; }
+.contact-link {
+  display:inline-flex; align-items:center; gap:10px;
+  padding:14px 28px;
+  border:1.5px solid rgba(126,205,200,.32);
+  border-radius:99px;
+  font-size:13px; letter-spacing:.05em;
+  color:var(--text); background:none; cursor:none;
+  font-family:'DM Sans',sans-serif; width:fit-content;
+  transition:background .2s, border-color .2s, transform .2s, color .2s;
+}
+.contact-link:hover { background:var(--teal); border-color:var(--teal); color:#fff; transform:translateX(7px); }
+
+/* ── POPUP ── */
 #popup-overlay {
-  position:fixed; inset:0; background:rgba(8,14,26,.78); backdrop-filter:blur(7px);
-  z-index:2000; display:none; align-items:center; justify-content:center; padding:20px;
+  position:fixed; inset:0;
+  background:rgba(8,14,26,.78);
+  backdrop-filter:blur(7px);
+  z-index:2000;
+  display:none; align-items:center; justify-content:center;
+  padding:20px;
 }
 #popup-overlay.open { display:flex; }
 #popup-box {
-  background:var(--ivory); border-radius:14px; width:100%; max-width:520px; max-height:78vh;
-  overflow-y:auto; padding:40px; position:relative; box-shadow:0 24px 60px rgba(0,0,0,.38);
+  background:var(--ivory);
+  border-radius:14px;
+  width:100%; max-width:520px; max-height:78vh;
+  overflow-y:auto; padding:40px; position:relative;
+  box-shadow:0 24px 60px rgba(0,0,0,.38);
+  animation:popIn .28s ease;
 }
-#popup-close { position:absolute; top:18px; right:18px; width:32px; height:32px; border-radius:50%; background:rgba(126,205,200,.1); border:none; cursor:none; }
+@keyframes popIn {
+  from { opacity:0; transform:scale(.93) translateY(14px); }
+  to   { opacity:1; transform:scale(1) translateY(0); }
+}
+#popup-close {
+  position:absolute; top:18px; right:18px;
+  width:32px; height:32px; border-radius:50%;
+  background:rgba(126,205,200,.1);
+  border:none; cursor:none; font-size:16px; color:var(--mid);
+  display:flex; align-items:center; justify-content:center;
+  transition:background .2s, color .2s;
+}
+#popup-close:hover { background:var(--teal); color:#fff; }
+#popup-tag   { font-size:9px; letter-spacing:.2em; text-transform:uppercase; color:var(--teal); margin-bottom:12px; }
+#popup-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:18px; line-height:1.2; }
+#popup-body  { font-size:14px; line-height:1.9; color:var(--mid); white-space:pre-wrap; }
+
+/* page enter */
+.page-enter { animation:pgIn .34s ease forwards; }
+@keyframes pgIn {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
 
 @media (max-width:600px) {
-  .career-header { flex-direction: column; gap: 5px; }
-  .card-title { white-space: normal; }
+  #navbar { padding:0 18px; }
+  .nav-links { gap:14px; }
+  .page-inner { padding:44px 20px 120px; }
+  .entry-choices { flex-direction:column; }
+  #popup-box { padding:26px 20px; }
+  .main-center-card { padding:28px 32px; }
+  .card-title { white-space:normal; }
 }
 </style>
 </head>
@@ -231,6 +384,7 @@ body.light-cursor #cursor.big {
 
 <div id="cursor"></div>
 
+<!-- NAVBAR -->
 <nav id="navbar">
   <button class="nav-logo" id="nav-logo-btn" onclick="goTo('main')">zzb19yk</button>
   <ul class="nav-links">
@@ -243,7 +397,9 @@ body.light-cursor #cursor.big {
   <button id="mode-badge" onclick="resetEntry()">— / —</button>
 </nav>
 
+<!-- ① ENTRY -->
 <div class="view" id="view-entry">
+  <div class="entry-glow"></div>
   <p class="entry-top-label">Portfolio</p>
   <h1 class="entry-title">어떻게 보실 건가요?</h1>
   <p class="entry-sub">공개 범위를 선택해주세요</p>
@@ -252,23 +408,27 @@ body.light-cursor #cursor.big {
       <div class="eb-mode">Mode 01</div>
       <div class="eb-title">Blind</div>
       <div class="eb-desc">이름, 학력, 연락처,<br>별명이 비공개됩니다.</div>
+      <span class="eb-arrow">↗</span>
     </button>
     <button class="entry-btn" onclick="selectMode('open')">
       <div class="eb-mode">Mode 02</div>
       <div class="eb-title">Open</div>
       <div class="eb-desc">이름, 학력, 연락처,<br>별명이 공개됩니다.</div>
+      <span class="eb-arrow">↗</span>
     </button>
   </div>
 </div>
 
+<!-- ② MAIN / BUBBLES -->
 <div class="view" id="view-main">
   <canvas id="bubble-canvas"></canvas>
   <div class="main-center-card">
     <h2>EXPLORE PORTFOLIO</h2>
-    <p>위 메뉴바를 클릭하여 포트폴리오를 탐색해보세요</p>
+    <p>↑ 위 메뉴바를 클릭하여 포트폴리오를 탐색해보세요</p>
   </div>
 </div>
 
+<!-- ③ 소개 -->
 <div class="view content-view" id="view-about">
   <div class="page-inner">
     <div class="section-label">About</div>
@@ -283,6 +443,7 @@ body.light-cursor #cursor.big {
   </div>
 </div>
 
+<!-- ④ 커리어 -->
 <div class="view content-view" id="view-career">
   <div class="page-inner">
     <div class="section-label">Career</div>
@@ -290,90 +451,195 @@ body.light-cursor #cursor.big {
 
     <div class="career-block">
       <div class="career-header">
-        <div class="career-who">바텍이우홀딩스 · 담당 (정규직)</div>
         <div class="career-meta">2024.09 — 현재</div>
+        <div class="career-who">바텍이우홀딩스 · 담당 (정규직)</div>
       </div>
       <div class="card-grid">
-        <div class="card" onclick="openPopup('프로젝트명 A','Career','설명...')">
+        <div class="card" onclick="openPopup('프로젝트명 A','Career','주요 업무나 프로젝트에 대한 자세한 설명을 여기에 작성해주세요.\n\n사용 기술, 역할, 성과 등을 구체적으로 서술하면 좋습니다.')">
+          <div class="card-tag">Project</div>
           <div class="card-title">프로젝트명 A</div>
+          <div class="card-desc">한 줄 요약을 여기에 작성</div>
+          <span class="card-more">자세히 →</span>
+        </div>
+        <div class="card" onclick="openPopup('프로젝트명 B','Career','주요 업무나 프로젝트에 대한 자세한 설명을 여기에 작성해주세요.\n\n사용 기술, 역할, 성과 등을 구체적으로 서술하면 좋습니다.')">
+          <div class="card-tag">Project</div>
+          <div class="card-title">프로젝트명 B</div>
           <div class="card-desc">한 줄 요약을 여기에 작성</div>
           <span class="card-more">자세히 →</span>
         </div>
       </div>
     </div>
 
-    <div class="career-block" style="margin-top:80px;">
-      <div class="section-label">Education</div>
+    <div class="career-block">
       <div class="career-header">
-        <div class="career-who"><span class="blind-field">서강대학교</span> · 종교학, 심리학, 경영학</div>
-        <div class="career-meta">2018 — 2024</div>
+        <div class="career-meta">2022.06 — 2022.12</div>
+        <div class="career-who">현대엔지비 · 매니저 (인턴)</div>
       </div>
       <div class="card-grid">
-        <div class="card" onclick="openPopup('중국문화학과 행정조교','Education','교수, 조교, 학생, 학부모와 소통하며 학과 행사를 운영했습니다.')">
-          <div class="card-title">중국문화학과 행정조교</div>
-          <div class="card-desc">소통, 출결, 행사 운영</div>
+        <div class="card" onclick="openPopup('프로젝트명 C','Career','자세한 설명을 작성해주세요.')">
+          <div class="card-tag">Project</div>
+          <div class="card-title">프로젝트명 C</div>
+          <div class="card-desc">한 줄 요약을 여기에 작성</div>
           <span class="card-more">자세히 →</span>
         </div>
       </div>
     </div>
+
+    <div class="career-block">
+      <div class="career-header">
+        <div class="career-meta">2022.02 — 2022.05</div>
+        <div class="career-who">에스원 · 사무보조 (계약직)</div>
+      </div>
+      <div class="card-grid">
+        <div class="card" onclick="openPopup('프로젝트명 D','Career','자세한 설명을 작성해주세요.')">
+          <div class="card-tag">Project</div>
+          <div class="card-title">프로젝트명 D</div>
+          <div class="card-desc">한 줄 요약을 여기에 작성</div>
+          <span class="card-more">자세히 →</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 학력 -->
+    <div class="edu-section">
+      <div class="edu-header">Education</div>
+      <div class="career-header">
+        <div class="career-meta">2018 — 2024</div>
+        <div class="career-who"><span class="blind-field">서강대학교</span> · 종교학, 심리학, 경영학</div>
+      </div>
+      <div class="card-grid">
+        <div class="card" onclick="openPopup('중국문화학과 행정조교','Education','2023.01 ~ 2023.06\n타 학과생이었지만 교수, 조교, 학생, 학부모와 소통하고,\n학과 행사 운영, 출결 등 맡은 일을 오류 없이 수행했습니다.')">
+          <div class="card-tag">Activity</div>
+          <div class="card-title">중국문화학과 행정조교</div>
+          <div class="card-desc">소통, 출결, 행사 운영</div>
+          <span class="card-more">자세히 →</span>
+        </div>
+        <div class="card" onclick="openPopup('인사관리학회 HEROs','Education','2020.09 ~ 2023.06 / 브랜딩팀 팀장\n\n인사 Case Study, 조별 프로젝트 및 발표, 학회 인스타그램 운영')">
+          <div class="card-tag">Activity</div>
+          <div class="card-title">인사관리학회 HEROs</div>
+          <div class="card-desc">브랜딩팀 팀장</div>
+          <span class="card-more">자세히 →</span>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
+<!-- ⑤ 역량 -->
 <div class="view content-view" id="view-skills">
   <div class="page-inner">
     <div class="section-label">Skills</div>
     <h2 class="section-title">할 수 있는 것들.</h2>
     <div class="card-grid" style="margin-top:44px">
-      <div class="card" onclick="openPopup('스킬 1','Skills','내용...')"><div class="card-title">스킬 1</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
+      <div class="card" onclick="openPopup('스킬 1','Skills','이 스킬로 할 수 있는 것들을 구체적으로 작성해주세요.\n\n예: 어느 수준까지 가능한지, 어떤 프로젝트에 사용했는지 등.')">
+        <div class="card-tag">Skill</div>
+        <div class="card-title">스킬 1</div>
+        <div class="card-desc">한 줄 설명을 여기에 작성</div>
+        <span class="card-more">자세히 →</span>
+      </div>
+      <div class="card" onclick="openPopup('스킬 2','Skills','이 스킬로 할 수 있는 것들을 구체적으로 작성해주세요.')">
+        <div class="card-tag">Skill</div>
+        <div class="card-title">스킬 2</div>
+        <div class="card-desc">한 줄 설명을 여기에 작성</div>
+        <span class="card-more">자세히 →</span>
+      </div>
+      <div class="card" onclick="openPopup('스킬 3','Skills','이 스킬로 할 수 있는 것들을 구체적으로 작성해주세요.')">
+        <div class="card-tag">Skill</div>
+        <div class="card-title">스킬 3</div>
+        <div class="card-desc">한 줄 설명을 여기에 작성</div>
+        <span class="card-more">자세히 →</span>
+      </div>
+      <div class="card" onclick="openPopup('스킬 4','Skills','이 스킬로 할 수 있는 것들을 구체적으로 작성해주세요.')">
+        <div class="card-tag">Skill</div>
+        <div class="card-title">스킬 4</div>
+        <div class="card-desc">한 줄 설명을 여기에 작성</div>
+        <span class="card-more">자세히 →</span>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- ⑥ 개인적 삶 -->
 <div class="view content-view" id="view-life">
   <div class="page-inner">
     <div class="section-label">Life</div>
     <h2 class="section-title">일 밖의 나.</h2>
+    <p class="section-body">취미, 관심사, 요즘 빠져있는 것들.</p>
     <div class="card-grid" style="margin-top:44px">
-      <div class="card" onclick="openPopup('독서','Life','책 이야기...')"><div class="card-title">📚 독서</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
-      <div class="card" onclick="openPopup('음악','Life','음악 이야기...')"><div class="card-title">🎵 음악</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
-      <div class="card" onclick="openPopup('여행','Life','여행 이야기...')"><div class="card-title">✈️ 여행</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
-      <div class="card" onclick="openPopup('요리','Life','요리 이야기...')"><div class="card-title">🍳 요리</div><div class="card-desc">설명...</div><span class="card-more">자세히 →</span></div>
+      <div class="card" onclick="openPopup('독서','Life','어떤 책들을 읽는지, 최근에 읽은 책이나 좋아하는 작가 등을 여기에 작성해주세요.')">
+        <div class="card-tag">Hobby</div>
+        <div class="card-title">📚 독서</div>
+        <div class="card-desc">한 줄 설명을 여기에 작성</div>
+        <span class="card-more">자세히 →</span>
+      </div>
+      <div class="card" onclick="openPopup('음악','Life','어떤 음악을 좋아하는지, 악기를 다룬다면 어떤 악기인지 등을 작성해주세요.')">
+        <div class="card-tag">Hobby</div>
+        <div class="card-title">🎵 음악</div>
+        <div class="card-desc">한 줄 설명을 여기에 작성</div>
+        <span class="card-more">자세히 →</span>
+      </div>
+      <div class="card" onclick="openPopup('여행','Life','여행 이야기, 좋아하는 여행지, 앞으로 가고 싶은 곳 등을 작성해주세요.')">
+        <div class="card-tag">Hobby</div>
+        <div class="card-title">✈️ 여행</div>
+        <div class="card-desc">한 줄 설명을 여기에 작성</div>
+        <span class="card-more">자세히 →</span>
+      </div>
+      <div class="card" onclick="openPopup('요리','Life','좋아하는 요리, 자주 만드는 음식, 맛집 이야기 등을 작성해주세요.')">
+        <div class="card-tag">Hobby</div>
+        <div class="card-title">🍳 요리</div>
+        <div class="card-desc">한 줄 설명을 여기에 작성</div>
+        <span class="card-more">자세히 →</span>
+      </div>
     </div>
   </div>
 </div>
 
+<!-- ⑦ 연락처 -->
 <div class="view content-view" id="view-contact">
   <div class="page-inner">
     <div class="section-label">Contact</div>
     <h2 class="section-title">함께 이야기해요.</h2>
-    <div class="contact-links" style="margin-top:30px;">
-      <button class="contact-link" id="email-btn">✉ <span class="blind-field">your@email.com</span></button>
+    <p class="section-body">새로운 기회나 협업에 대해 언제든 연락 주세요.</p>
+    <div class="contact-links">
+      <button class="contact-link" id="email-btn">
+        <span>✉</span>
+        <span class="blind-field" id="email-text">your@email.com</span>
+      </button>
+      <button class="contact-link" onclick="window.open('https://github.com/zzb19yk','_blank')">
+        <span>↗</span> GitHub
+      </button>
     </div>
   </div>
 </div>
 
-<div id="popup-overlay" onclick="if(event.target===this)closePopup()">
+<!-- POPUP -->
+<div id="popup-overlay" onclick="handleOverlayClick(event)">
   <div id="popup-box">
     <button id="popup-close" onclick="closePopup()">✕</button>
-    <div id="popup-tag" style="font-size:9px; color:var(--teal); margin-bottom:12px; letter-spacing:.2em;"></div>
-    <div id="popup-title" style="font-family:'Cormorant Garamond',serif; font-size:28px; color:var(--text); margin-bottom:18px;"></div>
-    <div id="popup-body" style="font-size:14px; line-height:1.9; color:var(--mid); white-space:pre-wrap;"></div>
+    <div id="popup-tag"></div>
+    <div id="popup-title"></div>
+    <div id="popup-body"></div>
   </div>
 </div>
 
 <script>
+/* ── STATE ── */
 let _mode = null, _cur = 'entry';
 
 /* ── CURSOR ── */
 const curEl = document.getElementById('cursor');
-let mx = -100, my = -100;
+let mx = -300, my = -300;
 document.addEventListener('mousemove', e => {
   mx = e.clientX; my = e.clientY;
-  curEl.style.left = mx + 'px'; curEl.style.top = my + 'px';
+  curEl.style.left = mx + 'px';
+  curEl.style.top  = my + 'px';
 });
 document.addEventListener('mouseover', e => {
-  curEl.classList.toggle('big', !!e.target.closest('button, .card, a'));
+  curEl.classList.toggle('big', !!e.target.closest('button,.card,a'));
 });
+
+const LIGHT_VIEWS = new Set(['about','career','skills','life','contact']);
 
 /* ── ROUTER ── */
 function showView(id) {
@@ -384,87 +650,184 @@ function showView(id) {
   const el = document.getElementById('view-' + id);
   el.classList.add('active');
   requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
-  
   _cur = id;
-  document.getElementById('navbar').classList.toggle('show', id !== 'entry');
-  document.body.classList.toggle('light-cursor', ['about','career','skills','life','contact'].includes(id));
 
+  const isEntry = id === 'entry';
+  document.getElementById('navbar').classList.toggle('show', !isEntry);
+  document.body.classList.toggle('light-cursor', LIGHT_VIEWS.has(id));
+
+  const labels = { about:'소개', career:'커리어', skills:'역량', life:'개인적 삶', contact:'연락처' };
   document.querySelectorAll('.nav-links button').forEach(b => {
-    const label = { about:'소개', career:'커리어', skills:'역량', life:'개인적 삶', contact:'연락처' }[id];
-    b.classList.toggle('active', b.textContent.trim() === label);
+    b.classList.toggle('active', b.textContent.trim() === (labels[id] || ''));
   });
-}
-function goTo(id) { showView(id); }
-function resetEntry() { showView('entry'); }
 
+  if (LIGHT_VIEWS.has(id)) {
+    const inner = el.querySelector('.page-inner');
+    if (inner) { inner.classList.remove('page-enter'); void inner.offsetWidth; inner.classList.add('page-enter'); }
+  }
+  if (id === 'main') setTimeout(resizeCanvas, 30);
+}
+
+function goTo(id) { showView(id); }
+
+function resetEntry() {
+  _mode = null;
+  document.getElementById('navbar').classList.remove('show');
+  showView('entry');
+}
+
+/* ── MODE ── */
 function selectMode(mode) {
   _mode = mode;
-  document.querySelectorAll('.blind-field').forEach(el => el.classList.toggle('blind-mask', mode === 'blind'));
+  document.querySelectorAll('.blind-field').forEach(el => {
+    el.classList.toggle('blind-mask', mode === 'blind');
+  });
+  document.getElementById('nav-logo-btn').textContent = mode === 'blind' ? 'Portfolio' : 'zzb19yk';
+  document.getElementById('email-btn').onclick = () => {
+    if (mode === 'open') location.href = 'mailto:your@email.com';
+  };
   document.getElementById('mode-badge').textContent = mode === 'blind' ? '🔒 Blind' : '🔓 Open';
-  showView('main');
+
+  const entry = document.getElementById('view-entry');
+  entry.classList.remove('visible');
+  setTimeout(() => { entry.classList.remove('active'); showView('main'); }, 450);
 }
 
+/* ── POPUP ── */
 function openPopup(title, tag, body) {
-  document.getElementById('popup-tag').textContent = tag;
+  document.getElementById('popup-tag').textContent   = tag;
   document.getElementById('popup-title').textContent = title;
-  document.getElementById('popup-body').textContent = body;
+  document.getElementById('popup-body').textContent  = body;
   document.getElementById('popup-overlay').classList.add('open');
 }
-function closePopup() { document.getElementById('popup-overlay').classList.remove('open'); }
+function closePopup() {
+  document.getElementById('popup-overlay').classList.remove('open');
+}
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('popup-overlay')) closePopup();
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closePopup(); });
 
-/* ── BUBBLES (고급스러운 움직임 복원 + 꽉 차게) ── */
+/* ════════════════════════════
+   BUBBLES
+   — white/ivory, dense fill, smooth physics
+════════════════════════════ */
 const canvas = document.getElementById('bubble-canvas');
-const ctx = canvas.getContext('2d');
-let W, H, bubbles = [];
+const ctx    = canvas.getContext('2d');
+let W = 0, H = 0, bubbles = [];
 
-function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
-window.addEventListener('resize', resize);
-resize();
+function resizeCanvas() {
+  W = canvas.width  = canvas.offsetWidth  || window.innerWidth;
+  H = canvas.height = canvas.offsetHeight || window.innerHeight;
+}
+window.addEventListener('resize', resizeCanvas);
+
+function rnd(a, b) { return a + Math.random() * (b - a); }
 
 class Bubble {
-  constructor() { this.init(); this.y = Math.random() * H; }
-  init() {
-    this.r = 15 + Math.random() * 60;
-    this.x = Math.random() * W;
-    this.y = H + this.r + Math.random() * 200;
-    this.vx = (Math.random() - 0.5) * 0.4;
-    this.vy = -0.4 - Math.random() * 1.2;
-    this.opacity = 0.5 + Math.random() * 0.3;
+  constructor(x, y, r) {
+    this.x = x !== undefined ? x : rnd(0, W);
+    this.y = y !== undefined ? y : rnd(0, H);
+    this.r = r !== undefined ? r : rnd(14, 68);
+    /* very gentle drift — no fast upward rush */
+    this.vx = rnd(-.15, .15);
+    this.vy = rnd(-.08, -.02);
+    this.opacity = rnd(.48, .78);
+    this.phase = Math.random() * Math.PI * 2;
+    this._w = 0;
+    this.rx = 0; this.ry = 0;
   }
-  update() {
-    this.x += this.vx; this.y += this.vy;
-    // 마우스 반응 (부드럽게 밀려남)
-    const dx = mx - this.x; const dy = my - this.y;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    if(dist < 150) { this.x -= dx * 0.01; this.y -= dy * 0.01; }
-    if (this.y < -this.r) this.init();
+
+  mouse(px, py) {
+    const dx = this.x - px, dy = this.y - py;
+    const d  = Math.hypot(dx, dy);
+    const zone = this.r * 3.8;
+    if (d < zone && d > 1) {
+      const f = (1 - d / zone) * 2.0;
+      this.rx += (dx / d) * f;
+      this.ry += (dy / d) * f;
+    }
   }
+
+  update(t) {
+    this.x += this.vx + this.rx;
+    this.y += this.vy + this.ry;
+    this.rx *= .85; this.ry *= .85;
+    this._w = Math.sin(t * .0007 + this.phase) * 1.8;
+    /* seamless wrap */
+    const pad = this.r + 2;
+    if (this.x < -pad) this.x = W + pad;
+    if (this.x > W + pad) this.x = -pad;
+    if (this.y < -pad) this.y = H + pad;
+    if (this.y > H + pad) this.y = -pad;
+  }
+
   draw() {
+    const r = Math.max(1, this.r + this._w);
     ctx.save();
     ctx.globalAlpha = this.opacity;
     ctx.beginPath();
-    ctx.arc(this.x, this.y, this.r, 0, Math.PI*2);
-    // 고급스러운 화이트 그라데이션 복원
-    const grad = ctx.createRadialGradient(this.x-this.r*0.3, this.y-this.r*0.3, 0, this.x, this.y, this.r);
-    grad.addColorStop(0, 'rgba(255,255,255,0.4)');
-    grad.addColorStop(1, 'rgba(220,240,255,0.1)');
-    ctx.fillStyle = grad; ctx.fill();
-    ctx.strokeStyle = 'rgba(255,255,255,0.4)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.arc(this.x, this.y, r, 0, Math.PI * 2);
+    const g = ctx.createRadialGradient(
+      this.x - r * 0.3, this.y - r * 0.3, 0,
+      this.x, this.y, r
+    );
+    g.addColorStop(0,   'rgba(255,255,255,0.40)');
+    g.addColorStop(0.6, 'rgba(255,255,255,0.10)');
+    g.addColorStop(1,   'rgba(220,240,255,0.03)');
+    ctx.fillStyle = g;
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.45)';
+    ctx.lineWidth = 1.1;
+    ctx.stroke();
     ctx.restore();
   }
 }
 
-for(let i=0; i<80; i++) bubbles.push(new Bubble());
+/* dense fill — 1 bubble per ~3000 px² */
+function spawnInitial() {
+  if (!W || !H) return;
+  const count = Math.max(50, Math.floor(W * H / 3000));
+  for (let i = 0; i < count; i++) {
+    setTimeout(() => bubbles.push(new Bubble()), i * 18);
+  }
+}
 
-function loop() {
-  if(_cur === 'main') {
-    ctx.clearRect(0,0,W,H);
-    bubbles.forEach(b => { b.update(); b.draw(); });
+function maintain() {
+  const target = Math.max(50, Math.floor(W * H / 7000));
+  while (bubbles.length < target) {
+    const edge = Math.floor(Math.random() * 4), r = rnd(14, 68);
+    let x, y;
+    if      (edge === 0) { x = rnd(0,W); y = H + r; }
+    else if (edge === 1) { x = -r;       y = rnd(0,H); }
+    else if (edge === 2) { x = W + r;    y = rnd(0,H); }
+    else                 { x = rnd(0,W); y = -r; }
+    bubbles.push(new Bubble(x, y, r));
+  }
+}
+
+let lastM = 0;
+function loop(t) {
+  if (_cur === 'main' && W > 0 && H > 0) {
+    ctx.clearRect(0, 0, W, H);
+    if (t - lastM > 1000) { maintain(); lastM = t; }
+    const rect = canvas.getBoundingClientRect();
+    const lx = mx - rect.left, ly = my - rect.top;
+    bubbles.forEach(b => {
+      b.mouse(lx, ly);
+      b.update(t);
+      b.draw();
+    });
   }
   requestAnimationFrame(loop);
 }
-loop();
+requestAnimationFrame(loop);
 
+/* ── INIT ── */
+window.addEventListener('load', () => {
+  resizeCanvas();
+  spawnInitial();
+});
 showView('entry');
 </script>
 </body>
