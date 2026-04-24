@@ -730,8 +730,8 @@ class Bubble {
     this.y = y !== undefined ? y : rnd(0, H);
     this.r = r !== undefined ? r : rnd(14, 68);
     /* very gentle drift — no fast upward rush */
-    this.vx = rnd(-.3, .3);
-    this.vy = rnd(-.15, -.05);
+    this.vx = rnd(-.5, .5);
+    this.vy = rnd(-.25, -.08);
     this.opacity = rnd(.48, .78);
     this.phase = Math.random() * Math.PI * 2;
     this._w = 0;
@@ -784,10 +784,10 @@ class Bubble {
   }
 }
 
-/* dense fill — 1 bubble per ~3000 px² */
+/* dense fill — 1 bubble per ~5000 px² */
 function spawnInitial() {
   if (!W || !H) return;
-  const count = Math.max(50, Math.floor(W * H / 3000));
+  const count = Math.max(50, Math.floor(W * H / 5000));
   for (let i = 0; i < count; i++) {
     setTimeout(() => bubbles.push(new Bubble()), i * 18);
   }
