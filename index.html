@@ -407,13 +407,13 @@ body.light-cursor #cursor.big {
     <button class="entry-btn" onclick="selectMode('blind')">
       <div class="eb-mode">Mode 01</div>
       <div class="eb-title">Blind</div>
-      <div class="eb-desc">이름, 학력, 연락처 등이<br> 비공개됩니다.</div>
+      <div class="eb-desc">학력, 연락처 등 개인정보가<br> 비공개됩니다.</div>
       <span class="eb-arrow">↗</span>
     </button>
     <button class="entry-btn" onclick="selectMode('open')">
       <div class="eb-mode">Mode 02</div>
       <div class="eb-title">Open</div>
-      <div class="eb-desc">이름, 학력, 연락처 등이<br> 공개됩니다.</div>
+      <div class="eb-desc">학력, 연락처 등 개인정보가<br> 공개됩니다.</div>
       <span class="eb-arrow">↗</span>
     </button>
   </div>
@@ -437,8 +437,7 @@ body.light-cursor #cursor.big {
       배우는 것을 좋아하고,<br>
       완결성을 높이는 것에 집중하는<br>
       인사행정 주니어<br><br>
-      이름 &nbsp;·&nbsp; <span class="blind-field">홍길동</span><br>
-      Github &nbsp;·&nbsp; <span class="blind-field">zzb19yk</span>
+
     </p>
   </div>
 </div>
@@ -634,7 +633,7 @@ body.light-cursor #cursor.big {
     <div class="contact-links">
       <button class="contact-link" id="email-btn">
         <span>✉</span>
-        <span class="blind-field" id="email-text">zzb19yk@email.com</span>
+        <span class="blind-field" id="email-text">Email</span>
       </button>
       <button class="contact-link" onclick="window.open('https://github.com/zzb19yk','_blank')">
         <span>↗</span> GitHub
@@ -715,7 +714,7 @@ function selectMode(mode) {
   });
   document.getElementById('nav-logo-btn').textContent = mode === 'blind' ? 'Portfolio' : 'zzb19yk';
   document.getElementById('email-btn').onclick = () => {
-    if (mode === 'open') location.href = 'mailto:zzb19yk@email.com';
+    if (mode === 'open') location.href = 'mailto:zzb19yk@gmail.com';
   };
   document.getElementById('mode-badge').textContent = mode === 'blind' ? '🔒 Blind' : '🔓 Open';
 
