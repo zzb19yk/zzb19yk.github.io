@@ -117,7 +117,7 @@ body.light-cursor #cursor.big {
 .entry-btn:hover::after { opacity:1; }
 .eb-mode  { font-size:10px; letter-spacing:.18em; text-transform:uppercase; color:var(--teal); margin-bottom:9px; }
 .eb-title { font-family:'Cormorant Garamond',serif; font-size:34px; font-weight:300; color:rgba(255,255,255,.9); margin-bottom:12px; }
-.eb-desc  { font-size:14px; line-height:1.8; color:rgba(255,255,255,.52); }
+.eb-desc  { font-size:14px; line-height:1.8; color:rgba(255,255,255,.52); word-break:keep-all; }
 .eb-arrow { position:absolute; bottom:18px; right:18px; font-size:14px; color:rgba(126,205,200,.38); transition:transform .2s,color .2s; }
 .entry-btn:hover .eb-arrow { transform:translate(3px,-3px); color:var(--teal); }
 @keyframes eIn { to { opacity:1; } }
@@ -407,13 +407,13 @@ body.light-cursor #cursor.big {
     <button class="entry-btn" onclick="selectMode('blind')">
       <div class="eb-mode">Mode 01</div>
       <div class="eb-title">Blind</div>
-      <div class="eb-desc">학력, 연락처 등 개인정보가<br> 비공개됩니다.</div>
+      <div class="eb-desc">학력, 연락처 등 개인정보가 비공개됩니다.</div>
       <span class="eb-arrow">↗</span>
     </button>
     <button class="entry-btn" onclick="selectMode('open')">
       <div class="eb-mode">Mode 02</div>
       <div class="eb-title">Open</div>
-      <div class="eb-desc">학력, 연락처 등 개인정보가<br> 공개됩니다.</div>
+      <div class="eb-desc">학력, 연락처 등 개인정보가 공개됩니다.</div>
       <span class="eb-arrow">↗</span>
     </button>
   </div>
